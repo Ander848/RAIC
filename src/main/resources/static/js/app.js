@@ -177,6 +177,99 @@ async function crearCuenta() {
   }
 }
 
+async function handleGoogleLogin(response) {
+  if (!response || !response.credential) {
+    mostrarMsgAuth('No se recibieron credenciales de Google.', 'error');
+    return;
+  }
+  mostrarMsgAuth('Verificando cuenta con Google…', '');
+  try {
+    const res = await fetch('/api/auth/google', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ credential: response.credential })
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      mostrarMsgAuth(data.error || 'No se pudo iniciar sesión con Google.', 'error');
+      return;
+    }
+    App._token = data.token;
+    localStorage.setItem('ca_token', data.token);
+    cerrarLogin();
+    iniciarSesion(data.usuario.nombre, data.usuario.email, data.usuario.rol);
+  } catch (e) {
+    mostrarMsgAuth('Error al comunicarse con el servidor.', 'error');
+  }
+}
+
+async function inicializarGoogleAuth() {
+  try {
+    const res = await fetch('/api/config/public');
+    if (!res.ok) return;
+    const config = await res.json();
+    App.googleClientId = config.googleClientId ? config.googleClientId.trim() : '';
+
+    if (!App.googleClientId) {
+      return;
+    }
+
+    const initGsi = () => {
+      if (typeof google === 'undefined' || !google.accounts || !google.accounts.id) {
+        setTimeout(initGsi, 200);
+        return;
+      }
+
+      google.accounts.id.initialize({
+        client_id: App.googleClientId,
+        callback: handleGoogleLogin,
+        auto_select: false
+      });
+
+      const btnLogin = document.getElementById('googleBtnContainerLogin');
+      if (btnLogin) {
+        btnLogin.innerHTML = '';
+        google.accounts.id.renderButton(btnLogin, {
+          theme: 'filled_black',
+          size: 'large',
+          width: '100%',
+          text: 'signin_with',
+          shape: 'rectangular',
+          locale: 'es'
+        });
+      }
+
+      const btnReg = document.getElementById('googleBtnContainerRegister');
+      if (btnReg) {
+        btnReg.innerHTML = '';
+        google.accounts.id.renderButton(btnReg, {
+          theme: 'filled_black',
+          size: 'large',
+          width: '100%',
+          text: 'signup_with',
+          shape: 'rectangular',
+          locale: 'es'
+        });
+      }
+    };
+
+    initGsi();
+  } catch (err) {
+    console.warn('Google Auth check:', err);
+  }
+}
+
+function clickGoogleLoginFallback() {
+  if (App.googleClientId && typeof google !== 'undefined' && google.accounts && google.accounts.id) {
+    google.accounts.id.prompt();
+    return;
+  }
+  mostrarMsgAuth('El inicio con Google está activo en el backend, pero requiere configurar tu Google Client ID en application.properties (google.client-id) o en la variable GOOGLE_CLIENT_ID.', 'error');
+}
+
+window.handleGoogleLogin = handleGoogleLogin;
+window.clickGoogleLoginFallback = clickGoogleLoginFallback;
+
 function evaluarFortalezaPassword() {
   const pass = document.getElementById('regPass')?.value || '';
   const box = document.getElementById('passStrengthBox');
@@ -1691,5 +1784,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     btnAbrirLanding.onclick = abrirLogin;
   }
 
+  inicializarGoogleAuth();
   await verificarSesionExistente();
 });
