@@ -37,7 +37,9 @@ public class SecurityConfig {
                                  "/favicon.ico", "/*.html", "/*.js", "/*.css").permitAll()
 
                 // ── Solo ADMIN ────────────────────────────────────────
-                // Registrar nuevo auto (iniciar proceso)
+                // Registrar auto (stateless REST)
+                .requestMatchers(HttpMethod.POST,  "/api/autos").hasRole("ADMIN")
+                // Registrar nuevo auto (iniciar proceso - retrocompatibilidad)
                 .requestMatchers(HttpMethod.POST,  "/api/autos/nuevo").hasRole("ADMIN")
                 // Actualizar datos del auto en edición
                 .requestMatchers(HttpMethod.PUT,   "/api/autos/actual").hasRole("ADMIN")
@@ -55,6 +57,9 @@ public class SecurityConfig {
                 .requestMatchers("/api/auth/usuarios/**").hasRole("ADMIN")
                 // Valuación (calcular precio)
                 .requestMatchers(HttpMethod.POST,  "/api/valuacion/**").hasRole("ADMIN")
+                // Predicción — entrenar y reentrenar solo ADMIN
+                .requestMatchers(HttpMethod.POST, "/api/prediccion/entrenar").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.POST, "/api/prediccion/reentrenar").hasRole("ADMIN")
 
                 // ── ADMIN y USUARIO (solo lectura) ────────────────────
                 // Ver todos los autos
@@ -71,6 +76,9 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/api/propietarios/**").hasAnyRole("ADMIN", "USUARIO")
                 // Precio base por año
                 .requestMatchers(HttpMethod.GET, "/api/valuacion/**").hasAnyRole("ADMIN", "USUARIO")
+                // Predicción — predecir, estado y pesos para ADMIN y USUARIO
+                .requestMatchers(HttpMethod.POST, "/api/prediccion/predecir").hasAnyRole("ADMIN", "USUARIO")
+                .requestMatchers(HttpMethod.GET,  "/api/prediccion/**").hasAnyRole("ADMIN", "USUARIO")
                 // Info del usuario autenticado
                 .requestMatchers("/api/auth/me").hasAnyRole("ADMIN", "USUARIO")
 

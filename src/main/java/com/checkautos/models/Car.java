@@ -1,5 +1,6 @@
 package com.checkautos.models;
 
+import java.time.LocalDateTime;
 import org.springframework.data.annotation.Id;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -38,6 +39,8 @@ public class Car {
     private String observacionMecanica;
     private String nPropietarios;
     private boolean archivado = false;
+    private LocalDateTime fechaCreacion;
+    private LocalDateTime fechaModificacion;
 
     public Car() {
         this.puntajeTecnico  = 0;
@@ -112,6 +115,12 @@ public class Car {
 
     public boolean isArchivado()             { return archivado; }
     public void   setArchivado(boolean a)    { this.archivado = a; }
+
+    public LocalDateTime getFechaCreacion() { return fechaCreacion; }
+    public void setFechaCreacion(LocalDateTime fechaCreacion) { this.fechaCreacion = fechaCreacion; }
+
+    public LocalDateTime getFechaModificacion() { return fechaModificacion; }
+    public void setFechaModificacion(LocalDateTime fechaModificacion) { this.fechaModificacion = fechaModificacion; }
 
     public int getPuntajePromedio() {
         return (puntajeTecnico + puntajeMecanico) / 2;

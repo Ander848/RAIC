@@ -1,6 +1,8 @@
 package com.checkautos.api;
 
 import com.checkautos.AppContext;
+import com.checkautos.dto.LoginRequest;
+import com.checkautos.dto.RegistroRequest;
 import com.checkautos.models.User;
 import com.checkautos.security.JwtTokenService;
 import org.springframework.http.ResponseEntity;
@@ -9,11 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
-import com.google.api.client.http.javanet.NetHttpTransport;
-import com.google.api.client.json.gson.GsonFactory;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.lang.Nullable;
 
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -25,13 +24,14 @@ public class AuthController {
 
     private final AppContext      appContext;
     private final JwtTokenService jwtTokenService;
+    private final GoogleIdTokenVerifier googleVerifier;
 
-    @Value("${google.client-id}")
-    private String googleClientId;
-
-    public AuthController(AppContext appContext, JwtTokenService jwtTokenService) {
+    public AuthController(AppContext appContext,
+                          JwtTokenService jwtTokenService,
+                          @Nullable GoogleIdTokenVerifier googleVerifier) {
         this.appContext      = appContext;
         this.jwtTokenService = jwtTokenService;
+        this.googleVerifier  = googleVerifier;
     }
 
     @PostMapping("/google")
@@ -40,17 +40,13 @@ public class AuthController {
         if (credential == null || credential.isBlank()) {
             return ResponseEntity.badRequest().body(Map.of("error", "Token de Google requerido"));
         }
-        if (googleClientId == null || googleClientId.isBlank()) {
+        if (googleVerifier == null) {
             return ResponseEntity.status(500).body(Map.of("error", "Google OAuth no configurado en el servidor"));
         }
 
         GoogleIdToken idToken;
         try {
-            GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(
-                    new NetHttpTransport(), GsonFactory.getDefaultInstance())
-                    .setAudience(Collections.singletonList(googleClientId))
-                    .build();
-            idToken = verifier.verify(credential);
+            idToken = googleVerifier.verify(credential);
         } catch (Exception e) {
             return ResponseEntity.status(401).body(Map.of("error", "Token de Google inválido"));
         }
@@ -66,20 +62,14 @@ public class AuthController {
         if (nombre == null || nombre.isBlank()) nombre = email.split("@")[0];
 
         // Buscar usuario por email o crearlo
-        User user = appContext.getAuthManager().getAllAccounts().stream()
-                .filter(u -> email.equals(u.getEmail()))
-                .findFirst().orElse(null);
+        User user = appContext.getAuthManager().findByEmail(email).orElse(null);
 
         if (user == null) {
             // Crear cuenta nueva sin password (solo Google)
             user = new User(nombre, email, null, "USUARIO");
             user.setGoogleId(googleId);
             user.setProvider("google");
-            appContext.getAuthManager().guardarUsuario(user);
-            // Recargar para obtener el ID de Mongo
-            user = appContext.getAuthManager().getAllAccounts().stream()
-                    .filter(u -> email.equals(u.getEmail()))
-                    .findFirst().orElse(user);
+            user = appContext.getAuthManager().guardarUsuario(user);
         } else {
             // Actualizar googleId si es la primera vez que usa Google
             if (user.getGoogleId() == null) {
@@ -87,7 +77,7 @@ public class AuthController {
                 if ("local".equals(user.getProvider()) || user.getProvider() == null) {
                     // mantener proveedor local si ya tenía contraseña
                 }
-                appContext.getAuthManager().guardarUsuario(user);
+                user = appContext.getAuthManager().guardarUsuario(user);
             }
         }
 
@@ -109,10 +99,9 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody Map<String, String> body) {
-        String email    = body.get("email");
-        String password = body.get("password");
-        if (email == null) email = body.get("username");
+    public ResponseEntity<?> login(@RequestBody LoginRequest req) {
+        String email = req.getEmail();
+        String password = req.getPassword();
 
         if (email == null || email.isBlank() || password == null || password.isBlank()) {
             return ResponseEntity.badRequest()
@@ -125,8 +114,12 @@ public class AuthController {
                     .body(Map.of("error", "Email o contraseña incorrectos"));
         }
 
-        User   user   = appContext.getCurrentUser();
-        String token  = jwtTokenService.generateToken(email.trim().toLowerCase(), user.getRol());
+        String emailNorm = email.trim().toLowerCase();
+        User user = appContext.getAuthManager().findByEmail(emailNorm).orElse(null);
+        if (user == null) {
+            return ResponseEntity.status(500).body(Map.of("error", "Error interno"));
+        }
+        String token  = jwtTokenService.generateToken(emailNorm, user.getRol());
         Date   expira = jwtTokenService.getExpirationDate(token);
 
         return ResponseEntity.ok(Map.of(
@@ -144,11 +137,10 @@ public class AuthController {
     }
 
     @PostMapping("/registro")
-    public ResponseEntity<?> registro(@RequestBody Map<String, String> body) {
-        String nombre   = body.get("nombre");
-        String email    = body.get("email");
-        String password = body.get("password");
-        if (email == null) email = body.get("username");
+    public ResponseEntity<?> registro(@RequestBody RegistroRequest req) {
+        String nombre   = req.getNombre();
+        String email    = req.getEmail();
+        String password = req.getPassword();
 
         if (nombre == null || nombre.isBlank() ||
             email == null || email.isBlank() ||
@@ -156,23 +148,11 @@ public class AuthController {
             return ResponseEntity.badRequest()
                     .body(Map.of("error", "nombre, email y password son requeridos"));
         }
-        if (password.length() < 4) {
-            return ResponseEntity.badRequest()
-                    .body(Map.of("error", "La contraseña debe tener al menos 4 caracteres"));
-        }
-        if (!email.contains("@") || !email.contains(".")) {
-            return ResponseEntity.badRequest()
-                    .body(Map.of("error", "El email no tiene un formato válido"));
-        }
-        if (appContext.getAuthManager().usernameExists(email.trim().toLowerCase())) {
-            return ResponseEntity.badRequest()
-                    .body(Map.of("error", "Ya existe una cuenta con ese email"));
-        }
 
         boolean ok = appContext.createAccount(nombre.trim(), email.trim().toLowerCase(), password.trim());
         if (!ok) {
             return ResponseEntity.badRequest()
-                    .body(Map.of("error", "No se pudo crear la cuenta"));
+                    .body(Map.of("error", "No se pudo crear la cuenta. Verifica que el email no esté registrado y que la contraseña tenga al menos 8 caracteres"));
         }
 
         return ResponseEntity.status(201)
@@ -182,9 +162,7 @@ public class AuthController {
     @GetMapping("/me")
     public ResponseEntity<?> me(Authentication authentication) {
         String email = authentication.getName();
-        User user = appContext.getAuthManager().getAllAccounts().stream()
-                .filter(u -> email.equals(u.getEmail()))
-                .findFirst().orElse(null);
+        User user = appContext.getAuthManager().findByEmail(email).orElse(null);
 
         if (user == null) {
             return ResponseEntity.status(404).body(Map.of("error", "Usuario no encontrado"));
@@ -202,9 +180,7 @@ public class AuthController {
     @GetMapping("/usuarios")
     public ResponseEntity<?> listarUsuarios(Authentication authentication) {
         String email = authentication.getName();
-        User solicitante = appContext.getAuthManager().getAllAccounts().stream()
-                .filter(u -> email.equals(u.getEmail()))
-                .findFirst().orElse(null);
+        User solicitante = appContext.getAuthManager().findByEmail(email).orElse(null);
 
         if (solicitante == null || !solicitante.isAdmin()) {
             return ResponseEntity.status(403)
@@ -230,9 +206,7 @@ public class AuthController {
                                          @RequestBody Map<String, String> body,
                                          Authentication authentication) {
         String emailAdmin = authentication.getName();
-        User admin = appContext.getAuthManager().getAllAccounts().stream()
-                .filter(u -> emailAdmin.equals(u.getEmail()))
-                .findFirst().orElse(null);
+        User admin = appContext.getAuthManager().findByEmail(emailAdmin).orElse(null);
 
         if (admin == null || !admin.isAdmin()) {
             return ResponseEntity.status(403)
@@ -245,9 +219,7 @@ public class AuthController {
                     .body(Map.of("error", "Rol inválido. Usa ADMIN o USUARIO"));
         }
 
-        User target = appContext.getAuthManager().getAllAccounts().stream()
-                .filter(u -> id.equals(u.getId()))
-                .findFirst().orElse(null);
+        User target = appContext.getAuthManager().findById(id).orElse(null);
 
         if (target == null) {
             return ResponseEntity.status(404).body(Map.of("error", "Usuario no encontrado"));

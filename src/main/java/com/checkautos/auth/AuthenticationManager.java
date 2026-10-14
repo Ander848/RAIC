@@ -2,6 +2,7 @@ package com.checkautos.auth;
 
 import com.checkautos.models.User;
 import com.checkautos.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -13,19 +14,23 @@ public class AuthenticationManager {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private User currentUser;
+
+    @Value("${admin.accounts:}") private String adminAccountsConfig;
 
     public AuthenticationManager(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository  = userRepository;
         this.passwordEncoder = passwordEncoder;
-        this.currentUser     = null;
-        initializeDefaultAccounts();
     }
 
+    @jakarta.annotation.PostConstruct
     private void initializeDefaultAccounts() {
-        crearSiNoExiste("Ander",   "ander@checkautos.com",   "ander848",   "ADMIN");
-        crearSiNoExiste("William", "william@checkautos.com", "william848", "ADMIN");
-        crearSiNoExiste("Daniela", "daniela@checkautos.com", "daniela848", "ADMIN");
+        if (adminAccountsConfig == null || adminAccountsConfig.isBlank()) return;
+        for (String entry : adminAccountsConfig.split(";")) {
+            String[] parts = entry.split(",");
+            if (parts.length == 3) {
+                crearSiNoExiste(parts[0].trim(), parts[1].trim(), parts[2].trim(), "ADMIN");
+            }
+        }
     }
 
     private void crearSiNoExiste(String nombre, String email, String password, String rol) {
@@ -38,11 +43,7 @@ public class AuthenticationManager {
     public boolean login(String email, String password) {
         if (email == null || email.isBlank() || password == null || password.isBlank()) return false;
         Optional<User> found = userRepository.findByEmail(email.trim().toLowerCase());
-        if (found.isPresent() && passwordEncoder.matches(password.trim(), found.get().getPassword())) {
-            this.currentUser = found.get();
-            return true;
-        }
-        return false;
+        return found.isPresent() && passwordEncoder.matches(password.trim(), found.get().getPassword());
     }
 
     public boolean createAccount(String nombre, String email, String password) {
@@ -53,7 +54,7 @@ public class AuthenticationManager {
         if (nombre == null || nombre.isBlank() ||
             email == null || email.isBlank() ||
             password == null || password.isBlank()) return false;
-        if (password.length() < 4) return false;
+        if (password.length() < 8) return false;
         if (!email.contains("@") || !email.contains(".")) return false;
         if (userRepository.existsByEmail(email.trim().toLowerCase())) return false;
 
@@ -63,13 +64,21 @@ public class AuthenticationManager {
         return true;
     }
 
-    public void   logout()             { this.currentUser = null; }
-    public User   getCurrentUser()     { return currentUser; }
-    public boolean isAuthenticated()   { return currentUser != null; }
+    public void   logout()             {}
     public List<User> getAllAccounts() { return userRepository.findAll(); }
 
+    public Optional<User> findByEmail(String email) {
+        if (email == null || email.isBlank()) return Optional.empty();
+        return userRepository.findByEmail(email.trim().toLowerCase());
+    }
+
+    public Optional<User> findById(String id) {
+        if (id == null || id.isBlank()) return Optional.empty();
+        return userRepository.findById(id);
+    }
+
     public boolean validatePassword(String password) {
-        return password != null && password.length() >= 4;
+        return password != null && password.length() >= 8;
     }
 
     public boolean usernameExists(String email) {

@@ -1,435 +1,359 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>CheckAutos — Valuación de Vehículos</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet"/>
-  <link href="css/styles.css" rel="stylesheet"/>
-  <!-- Google Identity Services -->
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RAIC — Sistema de Gestión Vehicular</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
 
-<div id="authPage" style="display:flex;">
-  <div class="auth-wrap">
+<!-- ══════════════════════════════════════════════════════════
+     LANDING PAGE
+════════════════════════════════════════════════════════════ -->
+<div id="landingPage">
+  <div class="landing-bg"></div>
+  <div class="landing-overlay"></div>
+  <div class="landing-orb landing-orb-1"></div>
+  
+  <div class="landing-content">
+    <div class="landing-logo">
+      <div class="landing-logo-icon">RA</div>
+      <div class="landing-logo-text">RAIC</div>
+    </div>
 
+    <h1 class="landing-title">
+      Gestión inteligente de
+      <span class="gradient-text">revisiones vehiculares</span>
+    </h1>
 
-    <div class="auth-hero">
-      <div class="brand-tag">
-        <i class="bi bi-shield-check-fill"></i> CheckAutos
+    <p class="landing-subtitle">
+      Plataforma profesional que optimiza el control técnico-mecánico,
+      centraliza la información y reduce errores en procesos manuales.
+    </p>
+
+    <div class="landing-features">
+      <div class="landing-feature">
+        <div class="landing-feature-icon"><i class="bi bi-database-fill"></i></div>
+        <div class="landing-feature-text">Registro centralizado de datos</div>
       </div>
-      <h1>Valuación de vehículos<br><span>precisa y confiable</span></h1>
-      <p>
-        Plataforma profesional para concesionarios.
-        Registra, evalúa técnica y mecánicamente cada vehículo
-        y obtén un precio de venta justo y documentado.
-      </p>
-      <div class="auth-hero-features">
-        <div class="auth-feature">
-          <i class="bi bi-check-circle-fill"></i>
-          Revisión técnica y mecánica paso a paso
-        </div>
-        <div class="auth-feature">
-          <i class="bi bi-check-circle-fill"></i>
-          Precio de venta calculado automáticamente
-        </div>
-        <div class="auth-feature">
-          <i class="bi bi-check-circle-fill"></i>
-          Historial completo de autos evaluados
-        </div>
+      <div class="landing-feature">
+        <div class="landing-feature-icon"><i class="bi bi-gear-wide-connected"></i></div>
+        <div class="landing-feature-text">Revisiones técnico-mecánicas</div>
+      </div>
+      <div class="landing-feature">
+        <div class="landing-feature-icon"><i class="bi bi-graph-up-arrow"></i></div>
+        <div class="landing-feature-text">Eficiencia operativa</div>
       </div>
     </div>
 
+    <button type="button" id="btnAbrirLogin" class="btn-landing" onclick="abrirLogin()">
+      <i class="bi bi-box-arrow-in-right"></i> Iniciar sesión
+    </button>
+  </div>
+</div>
 
-    <div class="auth-card">
+<!-- ═══════════════════════════════════════════════════════════
+     MODAL DE LOGIN
+════════════════════════════════════════════════════════════ -->
+<div id="loginModal">
+  <div class="login-modal-content">
+    <button class="btn-close-modal" onclick="cerrarLogin()">
+      <i class="bi bi-x-lg"></i>
+    </button>
 
+    <div class="login-tabs">
+      <button class="login-tab active" id="tab-login" onclick="switchTab('login')">Iniciar sesión</button>
+      <button class="login-tab" id="tab-register" onclick="switchTab('register')">Crear cuenta</button>
+    </div>
 
-      <div class="auth-tabs">
-        <button class="auth-tab active" id="tab-login"   onclick="switchTab('login')">Iniciar sesión</button>
-        <button class="auth-tab"        id="tab-registro" onclick="switchTab('registro')">Crear cuenta</button>
+    <div id="authMsg" class="auth-msg"></div>
+
+    <div class="login-panel active" id="panel-login">
+      <input type="email" id="loginUser" class="form-control" placeholder="Correo electrónico">
+      <input type="password" id="loginPass" class="form-control" placeholder="Contraseña">
+      <div class="login-check-row">
+        <input type="checkbox" id="rememberMe">
+        <label for="rememberMe">Recordarme</label>
       </div>
+      <button class="btn-login" id="btnLogin" onclick="login()">Iniciar sesión</button>
+      <hr class="login-divider">
+      <p class="login-terms">¿No tienes cuenta? <a href="#" onclick="switchTab('register');return false;">Créala aquí</a></p>
+    </div>
 
+    <div class="login-panel" id="panel-register">
+      <input type="text" id="regNombre" class="form-control" placeholder="Nombre completo">
+      <input type="email" id="regUser" class="form-control" placeholder="Correo electrónico">
+      <input type="password" id="regPass" class="form-control" placeholder="Contraseña" oninput="evaluarFortalezaPassword()">
 
-      <div id="authMsg" class="auth-msg"></div>
-
-
-      <div class="auth-panel active" id="panel-login">
-        <input type="email"    id="loginUser" class="form-control" placeholder="Correo electrónico">
-        <input type="password" id="loginPass" class="form-control" placeholder="Contraseña">
-        <div class="auth-check-row">
-          <input type="checkbox" id="rememberMe">
-          <label for="rememberMe">Recordarme</label>
+      <!-- VISUAL 4: Medidor y requisitos de contraseña -->
+      <div class="password-strength-box" id="passStrengthBox" style="display:none;">
+        <div class="password-strength-meter">
+          <div class="pass-meter-seg" id="meterSeg1"></div>
+          <div class="pass-meter-seg" id="meterSeg2"></div>
+          <div class="pass-meter-seg" id="meterSeg3"></div>
+          <div class="pass-meter-seg" id="meterSeg4"></div>
         </div>
-        <button class="btn-auth" onclick="login()">Iniciar sesión</button>
-        <div class="auth-or-divider"><span>o</span></div>
-        <div id="google-signin-btn" style="display:flex;justify-content:center;"></div>
-        <hr class="auth-divider">
-        <p class="auth-terms">
-          ¿No tienes cuenta?
-          <a onclick="switchTab('registro')"
-             style="color:var(--accent);cursor:pointer;text-decoration:none;">
-            Créala aquí
-          </a>
-        </p>
+        <div class="password-strength-info">
+          <span>Seguridad: <strong id="passStrengthText" class="pass-strength-text">—</strong></span>
+        </div>
+        <div class="pass-requirements-list">
+          <div class="pass-req-item" id="reqMinLen"><i class="bi bi-circle"></i> Mínimo 8 caracteres</div>
+          <div class="pass-req-item" id="reqNumero"><i class="bi bi-circle"></i> Al menos un número (0-9)</div>
+          <div class="pass-req-item" id="reqMayuscula"><i class="bi bi-circle"></i> Al menos una letra mayúscula</div>
+        </div>
       </div>
 
-
-      <div class="auth-panel" id="panel-registro">
-        <input type="text"  id="regNombre" class="form-control" placeholder="Nombre completo" style="margin-bottom:.75rem;">
-        <input type="email" id="regUser"   class="form-control" placeholder="Correo electrónico">
-        <input type="password" id="regPass"  class="form-control" placeholder="Contraseña">
-        <input type="password" id="regPass2" class="form-control" placeholder="Confirmar contraseña">
-        <button class="btn-auth" onclick="crearCuenta()">Crear cuenta</button>
-        <div class="auth-or-divider"><span>o regístrate con</span></div>
-        <div id="google-signup-btn" style="display:flex;justify-content:center;"></div>
-        <hr class="auth-divider">
-        <p class="auth-terms">
-          ¿Ya tienes cuenta?
-          <a onclick="switchTab('login')"
-             style="color:var(--accent);cursor:pointer;text-decoration:none;">
-            Inicia sesión
-          </a>
-        </p>
-      </div>
-
+      <input type="password" id="regPass2" class="form-control" placeholder="Confirmar contraseña">
+      <button class="btn-login" id="btnCrearCuenta" onclick="crearCuenta()">Crear cuenta</button>
+      <hr class="login-divider">
+      <p class="login-terms">¿Ya tienes cuenta? <a href="#" onclick="switchTab('login');return false;">Inicia sesión</a></p>
     </div>
   </div>
 </div>
 
+<!-- ══════════════════════════════════════════════════════════
+     APP SHELL
+════════════════════════════════════════════════════════════ -->
 <div id="appShell">
 
-
-  <nav id="sidebar">
+  <!-- SIDEBAR -->
+  <aside id="sidebar">
     <div class="sb-logo">
-      <div class="sb-logo-icon">CA</div>
-      <span class="sb-logo-text">CheckAutos</span>
+      <div class="sb-logo-icon">RA</div>
+      <div class="sb-logo-text">RAIC</div>
     </div>
 
     <div class="sb-section">
       <div class="sb-label">Principal</div>
-
-      <a class="sb-link active" data-view="dashboard" onclick="showView('dashboard')">
-        <i class="bi bi-house-fill"></i>
-        <span class="sb-link-text">Dashboard</span>
+      <a class="sb-link" data-view="dashboard" onclick="showView('dashboard')">
+        <i class="bi bi-grid-3x3-gap-fill"></i><span class="sb-link-text">Dashboard</span>
       </a>
-
       <a class="sb-link" data-view="autos" onclick="showView('autos')">
-        <i class="bi bi-car-front-fill"></i>
-        <span class="sb-link-text">Autos registrados</span>
-      </a>
-
-      <div class="sb-label">Proceso</div>
-
-      <a class="sb-link" data-view="registro" onclick="showView('registro')">
-        <i class="bi bi-plus-circle-fill"></i>
-        <span class="sb-link-text">Registrar auto</span>
-      </a>
-
-      <a class="sb-link locked" data-view="revision" onclick="showView('revision')">
-        <i class="bi bi-clipboard-check-fill"></i>
-        <span class="sb-link-text">Revisión técnica</span>
-        <i class="bi bi-lock-fill sb-lock"></i>
-      </a>
-
-      <a class="sb-link locked" data-view="mecanica" onclick="showView('mecanica')">
-        <i class="bi bi-tools"></i>
-        <span class="sb-link-text">Revisión mecánica</span>
-        <i class="bi bi-lock-fill sb-lock"></i>
-      </a>
-
-      <a class="sb-link locked" data-view="valuacion" onclick="showView('valuacion')">
-        <i class="bi bi-cash-stack"></i>
-        <span class="sb-link-text">Valuación / Precio</span>
-        <i class="bi bi-lock-fill sb-lock"></i>
-      </a>
-      <a class="sb-link" data-view="analitica" onclick="showView('analitica')">
-        <i class="bi bi-bar-chart-fill"></i>
-        <span class="sb-link-text">Analítica PowerBI</span>
+        <i class="bi bi-car-front-fill"></i><span class="sb-link-text">Autos registrados</span>
       </a>
     </div>
 
-    <div class="sb-footer" onclick="logout()">
-      <div class="sb-avatar" id="sbAvatarText">??</div>
+    <div class="sb-section">
+      <div class="sb-label" id="sbLabelProceso">Proceso</div>
+      <a class="sb-link" data-view="registro" onclick="showView('registro')">
+        <i class="bi bi-plus-circle-fill"></i><span class="sb-link-text">Registrar auto</span>
+      </a>
+      <a class="sb-link" data-view="revision" onclick="showView('revision')">
+        <i class="bi bi-clipboard-check-fill"></i><span class="sb-link-text">Revisión técnica</span>
+        <i class="bi bi-lock-fill sb-lock"></i>
+      </a>
+      <a class="sb-link" data-view="mecanica" onclick="showView('mecanica')">
+        <i class="bi bi-tools"></i><span class="sb-link-text">Revisión mecánica</span>
+        <i class="bi bi-lock-fill sb-lock"></i>
+      </a>
+      <a class="sb-link" data-view="valuacion" onclick="showView('valuacion')">
+        <i class="bi bi-cash-stack"></i><span class="sb-link-text">Valuación / Precio</span>
+        <i class="bi bi-lock-fill sb-lock"></i>
+      </a>
+    </div>
+
+    <div class="sb-section">
+      <div class="sb-label">Reportes</div>
+      <a class="sb-link" data-view="analitica" onclick="showView('analitica')">
+        <i class="bi bi-bar-chart-line-fill"></i><span class="sb-link-text">Analítica PowerBI</span>
+      </a>
+    </div>
+
+    <div class="sb-footer">
+      <div class="sb-avatar" id="sbAvatarText">AN</div>
       <div class="sb-user-wrap">
         <span class="sb-user-name" id="sbUserName">Usuario</span>
-        <i class="bi bi-box-arrow-right sb-user-arrow"></i>
       </div>
     </div>
-  </nav>
+  </aside>
 
-
-  <div id="topbar">
-    <span class="topbar-title" id="topbarTitle">Dashboard</span>
+  <!-- TOPBAR -->
+  <header id="topbar">
+    <div class="topbar-title" id="topbarTitle">Dashboard</div>
     <div class="topbar-right">
       <button class="btn-topbar-new" onclick="showView('registro')">
         <i class="bi bi-plus-lg"></i> Nuevo auto
       </button>
-      <div class="topbar-user-pill" onclick="logout()">
-        <div class="topbar-avatar" id="topbarAvatarTxt">??</div>
+      <div class="topbar-user-pill">
+        <div class="topbar-avatar" id="topbarAvatarTxt">AN</div>
         <span class="topbar-uname" id="topbarUserName">Usuario</span>
-        <i class="bi bi-chevron-down topbar-arrow"></i>
       </div>
     </div>
-  </div>
+  </header>
 
+  <!-- MAIN CONTENT -->
+  <main id="mainContent">
 
-  <div id="mainContent">
-
-
-    <div class="view" id="view-dashboard">
-
-
-      <div class="row g-3 mb-4">
-        <div class="col-6 col-xl-3">
-          <div class="stat-card">
-            <div>
-              <div class="stat-label">Total autos</div>
-              <div class="stat-value" id="statTotal">0</div>
-            </div>
-            <div class="stat-icon" style="background:rgba(13,110,253,.15);color:#60a5fa;">
+    <!-- DASHBOARD -->
+    <section id="view-dashboard" class="view active">
+      <div class="bento-grid">
+        <div class="stat-card">
+          <div class="stat-header">
+            <div class="stat-label">Total autos</div>
+            <div class="stat-icon" style="background:rgba(0,212,255,0.15);color:var(--accent);">
               <i class="bi bi-car-front-fill"></i>
             </div>
           </div>
+          <div class="stat-value" id="statTotal">0</div>
         </div>
-        <div class="col-6 col-xl-3">
-          <div class="stat-card">
-            <div>
-              <div class="stat-label">En revisión</div>
-              <div class="stat-value" id="statRevision">0</div>
-            </div>
-            <div class="stat-icon" style="background:rgba(245,158,11,.15);color:#fbbf24;">
-              <i class="bi bi-clipboard-check-fill"></i>
+        
+        <div class="stat-card">
+          <div class="stat-header">
+            <div class="stat-label">En revisión</div>
+            <div class="stat-icon" style="background:rgba(245,158,11,0.15);color:var(--warning);">
+              <i class="bi bi-hourglass-split"></i>
             </div>
           </div>
+          <div class="stat-value" id="statRevision">0</div>
         </div>
-        <div class="col-6 col-xl-3">
-          <div class="stat-card">
-            <div>
-              <div class="stat-label">Disponibles</div>
-              <div class="stat-value" id="statDisponibles">0</div>
-            </div>
-            <div class="stat-icon" style="background:rgba(25,135,84,.15);color:#4ade80;">
+        
+        <div class="stat-card">
+          <div class="stat-header">
+            <div class="stat-label">Disponibles</div>
+            <div class="stat-icon" style="background:rgba(16,185,129,0.15);color:var(--success);">
               <i class="bi bi-check-circle-fill"></i>
             </div>
           </div>
+          <div class="stat-value" id="statDisponibles">0</div>
         </div>
-        <div class="col-6 col-xl-3">
-          <div class="stat-card">
-            <div>
-              <div class="stat-label">Vendidos</div>
-              <div class="stat-value" id="statVendidos">0</div>
-            </div>
-            <div class="stat-icon" style="background:rgba(239,68,68,.15);color:#f87171;">
+        
+        <div class="stat-card">
+          <div class="stat-header">
+            <div class="stat-label">Vendidos</div>
+            <div class="stat-icon" style="background:rgba(239,68,68,0.15);color:var(--danger);">
               <i class="bi bi-bag-check-fill"></i>
             </div>
           </div>
+          <div class="stat-value" id="statVendidos">0</div>
         </div>
-      </div>
 
-      <div class="row g-3">
-
-        <div class="col-12 col-xl-8">
-          <div class="card-dark">
-            <div class="cd-header">
-              Autos registrados
-              <a onclick="showView('autos')"
-                 style="font-size:.8rem;color:var(--accent);cursor:pointer;text-decoration:none;">
-                Ver todos <i class="bi bi-arrow-right"></i>
-              </a>
+        <div class="stat-card large actividad-reciente" id="cardActividadReciente">
+          <div class="stat-header" style="margin-bottom:1rem;">
+            <div>
+              <div class="stat-label">Actividad reciente</div>
+              <div style="font-size:0.82rem;color:var(--text-secondary);margin-top:0.25rem;">Eventos e historial de vehículos en el sistema</div>
             </div>
-            <table class="tbl">
-              <thead>
-                <tr>
-                  <th>Vehículo</th><th>Año</th><th>Km</th>
-                  <th>Precio</th><th>Estado</th><th></th>
-                </tr>
-              </thead>
-              <tbody id="dashboardTbody">
-                <tr>
-                  <td colspan="6" style="text-align:center;padding:2rem;color:var(--text-dim);">
-                    <i class="bi bi-car-front" style="font-size:1.5rem;display:block;margin-bottom:.5rem;"></i>
-                    No hay autos registrados aún
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+            <div class="actividad-live-badge">
+              <span class="live-dot-ping"></span>
+              <span>En vivo</span>
+            </div>
+          </div>
+          <div id="listaActividadReciente" class="actividad-lista-container">
+            <!-- Cargado dinámicamente desde app.js con datos reales -->
           </div>
         </div>
 
-
-        <div class="col-12 col-xl-4">
-          <div class="card-dark h-100">
-            <div class="cd-header">Comenzar</div>
-            <div class="cd-body">
-              <p style="font-size:.875rem;color:var(--text-secondary);margin-bottom:1.25rem;line-height:1.7;">
-                Para registrar un auto sigue el proceso en orden desde el panel lateral.
-                Cada paso se desbloquea al completar el anterior.
-              </p>
-
-              <div style="display:flex;flex-direction:column;gap:.6rem;">
-                <div style="display:flex;align-items:center;gap:10px;font-size:.85rem;">
-                  <div style="width:26px;height:26px;background:var(--accent);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff;flex-shrink:0;">1</div>
-                  <span style="color:var(--text-primary);">Registrar datos del auto</span>
-                </div>
-                <div style="display:flex;align-items:center;gap:10px;font-size:.85rem;">
-                  <div style="width:26px;height:26px;background:rgba(13,110,253,.3);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#60a5fa;flex-shrink:0;">2</div>
-                  <span style="color:var(--text-secondary);">Revisión técnica (documentos)</span>
-                </div>
-                <div style="display:flex;align-items:center;gap:10px;font-size:.85rem;">
-                  <div style="width:26px;height:26px;background:rgba(13,110,253,.3);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#60a5fa;flex-shrink:0;">3</div>
-                  <span style="color:var(--text-secondary);">Revisión mecánica</span>
-                </div>
-                <div style="display:flex;align-items:center;gap:10px;font-size:.85rem;">
-                  <div style="width:26px;height:26px;background:rgba(13,110,253,.3);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#60a5fa;flex-shrink:0;">4</div>
-                  <span style="color:var(--text-secondary);">Calcular valuación y precio</span>
-                </div>
+        <div class="stat-card large comenzar-proceso" id="cardComenzarProceso">
+          <div class="stat-label">Comenzar proceso</div>
+          <div style="margin-top:1.5rem;">
+            <p style="color:var(--text-secondary);line-height:1.5;margin-bottom:1.5rem;font-size:0.9rem;">
+              Sigue el proceso en orden desde el panel lateral. Cada paso se desbloquea al completar el anterior.
+            </p>
+            <div style="display:flex;flex-direction:column;gap:0.75rem;">
+              <div style="display:flex;align-items:center;gap:0.75rem;">
+                <div style="width:36px;height:36px;border-radius:8px;background:var(--gradient-main);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.9rem;">1</div>
+                <span style="font-weight:500;font-size:0.9rem;">Registrar datos del auto</span>
               </div>
-
-              <button class="btn-primary-dark w-100 justify-content-center mt-4"
-                      onclick="showView('registro')">
-                <i class="bi bi-plus-lg me-1"></i> Registrar nuevo auto
-              </button>
+              <div style="display:flex;align-items:center;gap:0.75rem;">
+                <div style="width:36px;height:36px;border-radius:8px;background:var(--bg-input);color:var(--text-muted);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.9rem;">2</div>
+                <span style="color:var(--text-secondary);font-size:0.9rem;">Revisión técnica (documentos)</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:0.75rem;">
+                <div style="width:36px;height:36px;border-radius:8px;background:var(--bg-input);color:var(--text-muted);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.9rem;">3</div>
+                <span style="color:var(--text-secondary);font-size:0.9rem;">Revisión mecánica</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:0.75rem;">
+                <div style="width:36px;height:36px;border-radius:8px;background:var(--bg-input);color:var(--text-muted);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.9rem;">4</div>
+                <span style="color:var(--text-secondary);font-size:0.9rem;">Calcular valuación y precio</span>
+              </div>
             </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-
-    <div class="view" id="view-autos">
-
-      <div class="d-flex align-items-center justify-content-between mb-4">
-        <div>
-          <h2 style="font-size:1.2rem;margin-bottom:.2rem;">Autos registrados</h2>
-          <p style="color:var(--text-secondary);font-size:.85rem;margin:0;">
-            Historial completo de vehículos evaluados
-          </p>
-        </div>
-        <button class="btn-topbar-new" onclick="showView('registro')">
-          <i class="bi bi-plus-lg"></i> Nuevo auto
-        </button>
-      </div>
-
-
-      <div class="card-dark mb-3">
-        <div class="cd-body">
-          <div class="row g-2 align-items-end">
-            <div class="col-12 col-md-5">
-              <label class="form-label">Buscar</label>
-              <input type="text" class="form-control" placeholder="Marca, modelo o placa…">
-            </div>
-            <div class="col-6 col-md-3">
-              <label class="form-label">Estado</label>
-              <select class="form-select">
-                <option>Todos</option>
-                <option>Disponible</option>
-                <option>En revisión</option>
-                <option>Vendido</option>
-              </select>
-            </div>
-            <div class="col-6 col-md-2">
-              <label class="form-label">Año</label>
-              <select class="form-select">
-                <option>Todos</option>
-                <option>2025</option><option>2024</option><option>2023</option>
-                <option>2022</option><option>2021</option><option>2020</option>
-              </select>
-            </div>
-            <div class="col-6 col-md-3">
-              <label class="form-label">Precio mínimo</label>
-              <select class="form-select" id="filtroPrecioMin">
-                <option value="">Sin mínimo</option>
-                <option value="20000000">$20 M</option>
-                <option value="30000000">$30 M</option>
-                <option value="40000000">$40 M</option>
-                <option value="50000000">$50 M</option>
-                <option value="60000000">$60 M</option>
-                <option value="70000000">$70 M</option>
-              </select>
-            </div>
-            <div class="col-6 col-md-3">
-              <label class="form-label">Precio máximo</label>
-              <select class="form-select" id="filtroPrecioMax">
-                <option value="">Sin máximo</option>
-                <option value="30000000">$30 M</option>
-                <option value="40000000">$40 M</option>
-                <option value="50000000">$50 M</option>
-                <option value="60000000">$60 M</option>
-                <option value="70000000">$70 M</option>
-                <option value="90000000">$90 M</option>
-              </select>
-            </div>
-            <div class="col-6 col-md-3">
-              <label class="form-label">Ordenar por</label>
-              <select class="form-select" id="filtroOrden">
-                <option value="">Sin orden</option>
-                <option value="precio_asc">Precio: menor a mayor</option>
-                <option value="precio_desc">Precio: mayor a menor</option>
-                <option value="año_asc">Año: más antiguo</option>
-                <option value="año_desc">Año: más reciente</option>
-                <option value="km_asc">Km: menor a mayor</option>
-                <option value="km_desc">Km: mayor a menor</option>
-              </select>
-            </div>
-            <div class="col-6 col-md-3">
-              <label class="form-label">&nbsp;</label>
-              <button class="btn-ghost w-100" onclick="filtrarAutos()">
-                <i class="bi bi-funnel-fill me-1"></i> Filtrar
-              </button>
-            </div>
+            <button class="btn-primary-dark" style="width:100%;justify-content:center;margin-top:1.5rem;" onclick="showView('registro')">
+              <i class="bi bi-plus-lg"></i> Registrar nuevo auto
+            </button>
           </div>
         </div>
       </div>
 
       <div class="card-dark">
-        <table class="tbl">
-          <thead>
-            <tr>
-              <th>Vehículo</th><th>Placa</th><th>Año</th><th>Km</th>
-              <th>Precio</th><th>Estado</th><th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody id="autosTbody">
-            <tr>
-              <td colspan="7" style="text-align:center;padding:2rem;color:var(--text-dim);">
-                <i class="bi bi-car-front" style="font-size:1.5rem;display:block;margin-bottom:.5rem;"></i>
-                No hay autos registrados aún
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <div class="d-flex align-items-center justify-content-between px-3 py-2"
-             style="border-top:1px solid var(--border);">
-          <small style="color:var(--text-secondary);" id="autosConteo">0 registros</small>
-          <nav>
-            <ul class="pagination pagination-sm mb-0">
-              <li class="page-item disabled">
-                <a class="page-link" style="background:var(--bg-input);border-color:var(--border-strong);color:var(--text-dim);">‹</a>
-              </li>
-              <li class="page-item active">
-                <a class="page-link" style="background:var(--accent);border-color:var(--accent);color:#fff;">1</a>
-              </li>
-              <li class="page-item">
-                <a class="page-link" style="background:var(--bg-input);border-color:var(--border-strong);color:var(--text-primary);">›</a>
-              </li>
-            </ul>
-          </nav>
+        <div class="cd-header">
+          <span>Autos registrados recientemente</span>
+          <a href="#" onclick="showView('autos');return false;" style="color:var(--accent);text-decoration:none;font-size:0.85rem;font-weight:600;">Ver todos <i class="bi bi-arrow-right"></i></a>
+        </div>
+        <div class="cd-body" style="padding:0;">
+          <table class="tbl">
+            <thead>
+              <tr><th>Vehículo</th><th>Año</th><th>Km</th><th>Precio</th><th>Estado</th><th></th></tr>
+            </thead>
+            <tbody id="dashboardTbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- AUTOS -->
+    <section id="view-autos" class="view">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem;flex-wrap:wrap;gap:1rem;">
+        <div>
+          <h2 style="font-family:'Outfit',sans-serif;font-size:1.8rem;font-weight:800;">Autos registrados</h2>
+          <p style="color:var(--text-secondary);font-size:0.95rem;margin-top:0.3rem;">Historial completo de vehículos evaluados</p>
+        </div>
+        <div style="display:flex;align-items:center;gap:1rem;">
+          <div class="view-mode-toggle">
+            <button id="btnVistaTabla" class="btn-toggle-mode active" onclick="cambiarModoVistaAutos('tabla')">
+              <i class="bi bi-table"></i> Tabla
+            </button>
+            <button id="btnVistaGrid" class="btn-toggle-mode" onclick="cambiarModoVistaAutos('grid')">
+              <i class="bi bi-grid-fill"></i> Tarjetas
+            </button>
+          </div>
+          <button class="btn-primary-dark" onclick="showView('registro')">
+            <i class="bi bi-plus-lg"></i> Nuevo auto
+          </button>
         </div>
       </div>
 
-    </div>
+      <div class="card-dark" style="margin-bottom:1.5rem;">
+        <div class="cd-body">
+          <div style="display:grid;grid-template-columns:2fr 1fr 1fr;gap:1rem;margin-bottom:1rem;">
+            <div><label class="form-label">Buscar</label><input type="text" class="form-control" placeholder="Marca, modelo o placa..."></div>
+            <div><label class="form-label">Estado</label><select class="form-select"><option>Todos</option><option>Disponible</option><option>En revisión</option><option>Vendido</option></select></div>
+            <div><label class="form-label">Año</label><select class="form-select"><option>Todos</option></select></div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:1rem;">
+            <div><label class="form-label">Precio mínimo</label><select class="form-select" id="filtroPrecioMin"><option value="0">Sin mínimo</option></select></div>
+            <div><label class="form-label">Precio máximo</label><select class="form-select" id="filtroPrecioMax"><option value="0">Sin máximo</option></select></div>
+            <div><label class="form-label">Ordenar por</label><select class="form-select" id="filtroOrden"><option value="">Sin orden</option></select></div>
+            <div style="display:flex;align-items:flex-end;"><button class="btn-ghost" style="width:100%;justify-content:center;"><i class="bi bi-funnel-fill"></i> Filtrar</button></div>
+          </div>
+        </div>
+      </div>
 
+      <div class="card-dark">
+        <div class="cd-body" style="padding:0;">
+          <div id="autosTableContainer">
+            <table class="tbl">
+              <thead>
+                <tr><th>Vehículo</th><th>Placa</th><th>Año</th><th>Km</th><th>Precio</th><th>Estado</th><th class="col-acciones-admin">Acciones</th></tr>
+              </thead>
+              <tbody id="autosTbody"></tbody>
+            </table>
+          </div>
+          <div id="autosGridContainer" class="autos-cards-grid" style="display:none;"></div>
+        </div>
+        <div style="padding:1.25rem 1.5rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
+          <span id="autosConteo" style="font-size:0.9rem;color:var(--text-secondary);">0 registros</span>
+          <ul id="paginacionAutos" class="pagination" style="display:flex;gap:6px;list-style:none;margin:0;padding:0;"></ul>
+        </div>
+      </div>
+    </section>
 
-    <div class="view" id="view-registro">
-
-      <div class="mb-4">
-        <h2 style="font-size:1.2rem;margin-bottom:.2rem;">Registrar nuevo auto</h2>
-        <p style="color:var(--text-secondary);font-size:.85rem;margin:0;">
-          Paso 1 de 4 — Datos del vehículo y propietario
-        </p>
+    <!-- REGISTRO -->
+    <section id="view-registro" class="view">
+      <div style="margin-bottom:2rem;">
+        <h2 style="font-family:'Outfit',sans-serif;font-size:1.8rem;font-weight:800;">Registrar nuevo auto</h2>
+        <p style="color:var(--text-secondary);font-size:0.95rem;margin-top:0.3rem;">Paso 1 de 4 — Datos del vehículo y propietario</p>
       </div>
 
       <div class="steps">
@@ -439,170 +363,81 @@
         <div class="step">4. Valuación</div>
       </div>
 
-      <div class="row g-3">
-
-        <div class="col-12 col-lg-8">
-
-          <div class="card-dark mb-3">
-            <div class="cd-header">
-              <span><i class="bi bi-car-front-fill me-2" style="color:var(--accent);"></i>Información del vehículo</span>
+      <div style="display:grid;grid-template-columns:2fr 1fr;gap:1.5rem;">
+        <div class="card-dark">
+          <div class="cd-header">
+            <span><i class="bi bi-car-front-fill" style="color:var(--accent);margin-right:8px;"></i> Información del vehículo</span>
+          </div>
+          <div class="cd-body">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
+              <div><label class="form-label">Marca *</label><select id="inp_marca" class="form-select" onchange="actualizarModelos()"><option value="">Seleccionar…</option></select></div>
+              <div><label class="form-label">Modelo *</label><select id="inp_modelo" class="form-select"><option value="">Selecciona una marca primero…</option></select></div>
             </div>
-            <div class="cd-body">
-              <div class="row g-3">
-                <div class="col-sm-6">
-                  <label class="form-label">Marca *</label>
-                  <select class="form-select" id="inp_marca" onchange="actualizarModelos()">
-                    <option value="">Seleccionar…</option>
-                  </select>
-                </div>
-                <div class="col-sm-6">
-                  <label class="form-label">Modelo *</label>
-                  <select class="form-select" id="inp_modelo">
-                    <option value="">Selecciona una marca primero…</option>
-                  </select>
-                </div>
-                <div class="col-sm-4">
-                  <label class="form-label">Año *</label>
-                  <input type="text" class="form-control" id="inp_año"
-                         placeholder="Ej: 2022" maxlength="4"
-                         list="listaAnios" autocomplete="off">
-                  <datalist id="listaAnios"></datalist>
-                </div>
-                <div class="col-sm-4">
-                  <label class="form-label">Color</label>
-                  <input type="text" class="form-control" id="inp_color" placeholder="Ej: Blanco perla">
-                </div>
-                <div class="col-sm-4">
-                  <label class="form-label">Placa *</label>
-                  <input type="text" class="form-control" id="inp_placa" placeholder="ABC-123"
-                         style="text-transform:uppercase;">
-                </div>
-                <div class="col-sm-6">
-                  <label class="form-label">Kilometraje *</label>
-                  <div class="input-group">
-                    <input type="number" class="form-control" id="inp_kilometraje" placeholder="45000" min="0">
-                    <span class="input-group-text">km</span>
-                  </div>
-                </div>
-                <div class="col-sm-6">
-                  <label class="form-label">Transmisión</label>
-                  <select class="form-select" id="inp_transmision">
-                    <option value="">Seleccionar…</option>
-                    <option>Automática</option><option>Manual</option><option>CVT</option>
-                  </select>
-                </div>
-                <div class="col-sm-6">
-                  <label class="form-label">Combustible</label>
-                  <select class="form-select" id="inp_combustible">
-                    <option value="">Seleccionar…</option>
-                    <option>Gasolina</option><option>Diésel</option>
-                    <option>Híbrido</option><option>Eléctrico</option>
-                  </select>
-                </div>
-                <div class="col-sm-6">
-                  <label class="form-label">N.º propietarios</label>
-                  <select class="form-select" id="inp_nPropietarios">
-                    <option value="">Seleccionar…</option>
-                    <option value="1">1 — Primer dueño</option>
-                    <option value="2">2</option>
-                    <option value="3">3 o más</option>
-                  </select>
-                </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-bottom:1rem;">
+              <div><label class="form-label">Año *</label><input type="number" id="inp_año" class="form-control" placeholder="Ej: 2022" list="listaAnios" min="1950" max="2035" oninput="if(this.value<0)this.value=Math.abs(this.value)"><datalist id="listaAnios"></datalist></div>
+              <div><label class="form-label">Color</label><input type="text" id="inp_color" class="form-control" placeholder="Ej: Blanco perla"></div>
+              <div>
+                <label class="form-label">Placa * (Auto)</label>
+                <input type="text" id="inp_placa" class="form-control" placeholder="ABC-123" maxlength="7" style="text-transform:uppercase;">
+                <div id="placaFeedback" style="font-size:0.75rem;margin-top:4px;display:none;"></div>
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
+              <div><label class="form-label">Kilometraje *</label><div class="input-group"><input type="number" id="inp_kilometraje" class="form-control" placeholder="45000" min="0" step="1" oninput="if(this.value<0)this.value=Math.abs(this.value)"><span class="input-group-text">km</span></div></div>
+              <div><label class="form-label">Transmisión</label><select id="inp_transmision" class="form-select"><option value="">Seleccionar…</option><option>Automática</option><option>Manual</option><option>CVT</option></select></div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+              <div><label class="form-label">Combustible</label><select id="inp_combustible" class="form-select"><option value="">Seleccionar…</option><option>Gasolina</option><option>Diésel</option><option>Híbrido</option><option>Eléctrico</option></select></div>
+              <div><label class="form-label">N.º propietarios</label><select id="inp_nPropietarios" class="form-select"><option value="">Seleccionar…</option><option>1 — Primer dueño</option><option>2</option><option>3 o más</option></select></div>
+            </div>
+
+            <div style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--border);">
+              <h4 style="font-family:'Outfit',sans-serif;font-size:1.1rem;margin-bottom:1rem;"><i class="bi bi-person-fill" style="color:var(--accent);margin-right:8px;"></i> Datos del propietario</h4>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
+                <div><label class="form-label">Nombre completo *</label><input type="text" id="inp_propietario" class="form-control" placeholder="Nombre del propietario"></div>
+                <div><label class="form-label">Cédula / NIT *</label><input type="text" id="inp_cedula" class="form-control" placeholder="Número de documento"></div>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+                <div><label class="form-label">Teléfono</label><input type="tel" id="inp_telefono" class="form-control" placeholder="300 000 0000"></div>
+                <div><label class="form-label">Correo electrónico</label><input type="email" id="inp_email" class="form-control" placeholder="correo@ejemplo.com"></div>
+              </div>
+            </div>
+
+            <div style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--border);">
+              <h4 style="font-family:'Outfit',sans-serif;font-size:1.1rem;margin-bottom:1rem;"><i class="bi bi-camera-fill" style="color:var(--accent);margin-right:8px;"></i> Fotografías del vehículo</h4>
+              <div style="border:2px dashed var(--border-light);border-radius:12px;padding:3rem;text-align:center;color:var(--text-secondary);background:rgba(0,212,255,0.02);">
+                <i class="bi bi-cloud-arrow-up" style="font-size:2.5rem;color:var(--accent);display:block;margin-bottom:0.75rem;"></i>
+                <div style="font-size:1rem;font-weight:600;margin-bottom:0.5rem;">Arrastra fotos o haz clic para subir</div>
+                <div style="font-size:0.85rem;color:var(--text-muted);">JPG, PNG — máx. 10 fotos · 5 MB c/u</div>
               </div>
             </div>
           </div>
-
-          <div class="card-dark mb-3">
-            <div class="cd-header">
-              <span><i class="bi bi-person-fill me-2" style="color:var(--accent);"></i>Datos del propietario</span>
-            </div>
-            <div class="cd-body">
-              <div class="row g-3">
-                <div class="col-sm-6">
-                  <label class="form-label">Nombre completo *</label>
-                  <input type="text" class="form-control" id="inp_propietario" placeholder="Nombre">
-                </div>
-                <div class="col-sm-6">
-                  <label class="form-label">Cédula / NIT *</label>
-                  <input type="text" class="form-control" id="inp_cedula" placeholder="000-000-000">
-                </div>
-                <div class="col-sm-6">
-                  <label class="form-label">Teléfono</label>
-                  <input type="tel" class="form-control" id="inp_telefono" placeholder="+57 300 0000000">
-                </div>
-                <div class="col-sm-6">
-                  <label class="form-label">Correo electrónico</label>
-                  <input type="email" class="form-control" id="inp_email" placeholder="correo@ejemplo.com">
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="card-dark">
-            <div class="cd-header">
-              <span><i class="bi bi-images me-2" style="color:var(--accent);"></i>Fotografías del vehículo</span>
-            </div>
-            <div class="cd-body">
-              <div style="border:2px dashed var(--border-strong);border-radius:10px;
-                          padding:2rem;text-align:center;cursor:pointer;transition:border-color .2s;"
-                   onmouseenter="this.style.borderColor='var(--accent)'"
-                   onmouseleave="this.style.borderColor='var(--border-strong)'">
-                <i class="bi bi-cloud-arrow-up-fill" style="font-size:2rem;color:var(--text-dim);"></i>
-                <p style="margin:.6rem 0 .2rem;font-size:.9rem;font-weight:500;">
-                  Arrastra fotos o haz clic para subir
-                </p>
-                <small style="color:var(--text-secondary);">JPG, PNG — máx. 10 fotos · 5 MB c/u</small>
-              </div>
-            </div>
-          </div>
-
         </div>
 
-
-        <div class="col-12 col-lg-4">
-          <div class="card-dark mb-3">
-            <div class="cd-header">Resumen del registro</div>
-            <div class="cd-body">
-              <table style="width:100%;font-size:.84rem;border-collapse:collapse;">
-                <tr><td style="color:var(--text-secondary);padding:.3rem 0;">Vehículo</td>
-                    <td style="text-align:right;font-weight:600;" id="rs_vehiculo">—</td></tr>
-                <tr><td style="color:var(--text-secondary);padding:.3rem 0;">Placa</td>
-                    <td style="text-align:right;" id="rs_placa">—</td></tr>
-                <tr><td style="color:var(--text-secondary);padding:.3rem 0;">Kilometraje</td>
-                    <td style="text-align:right;" id="rs_km">—</td></tr>
-                <tr><td style="color:var(--text-secondary);padding:.3rem 0;">Color</td>
-                    <td style="text-align:right;" id="rs_color">—</td></tr>
-                <tr><td style="color:var(--text-secondary);padding:.3rem 0;">Transmisión</td>
-                    <td style="text-align:right;" id="rs_trans">—</td></tr>
-                <tr><td style="color:var(--text-secondary);padding:.3rem 0;">Propietario</td>
-                    <td style="text-align:right;" id="rs_prop">—</td></tr>
-              </table>
-              <hr style="border-color:var(--border);margin:.85rem 0;">
-              <span class="badge-pend">Pendiente revisión</span>
-            </div>
-          </div>
-
-          <div class="d-grid gap-2">
-            <button class="btn-primary-dark justify-content-center" onclick="guardarYContinuar()">
-              Guardar y continuar <i class="bi bi-arrow-right ms-1"></i>
-            </button>
-            <button class="btn-ghost justify-content-center">
-              <i class="bi bi-floppy-fill me-1"></i> Guardar borrador
-            </button>
+        <div class="card-dark" style="height:fit-content;position:sticky;top:90px;">
+          <div class="cd-header"><span>Resumen del registro</span></div>
+          <div class="cd-body">
+            <table style="width:100%;font-size:0.9rem;">
+              <tr><td style="color:var(--text-secondary);padding:0.5rem 0;">Vehículo</td><td style="text-align:right;font-weight:600;" id="rs_vehiculo">—</td></tr>
+              <tr><td style="color:var(--text-secondary);padding:0.5rem 0;">Placa</td><td style="text-align:right;font-weight:600;" id="rs_placa">—</td></tr>
+              <tr><td style="color:var(--text-secondary);padding:0.5rem 0;">Kilometraje</td><td style="text-align:right;font-weight:600;" id="rs_km">—</td></tr>
+              <tr><td style="color:var(--text-secondary);padding:0.5rem 0;">Color</td><td style="text-align:right;font-weight:600;" id="rs_color">—</td></tr>
+              <tr><td style="color:var(--text-secondary);padding:0.5rem 0;">Transmisión</td><td style="text-align:right;font-weight:600;" id="rs_trans">—</td></tr>
+              <tr><td style="color:var(--text-secondary);padding:0.5rem 0;">Propietario</td><td style="text-align:right;font-weight:600;" id="rs_prop">—</td></tr>
+            </table>
+            <div style="margin-top:1.5rem;"><span class="badge-pend">Pendiente revisión</span></div>
+            <button class="btn-primary-dark" style="width:100%;justify-content:center;margin-top:1.5rem;" onclick="guardarYContinuar()">Guardar y continuar <i class="bi bi-arrow-right"></i></button>
+            <button class="btn-ghost" style="width:100%;justify-content:center;margin-top:0.75rem;" onclick="guardarBorrador()"><i class="bi bi-floppy"></i> Guardar borrador</button>
           </div>
         </div>
       </div>
+    </section>
 
-    </div>
-
-
-    <div class="view" id="view-revision">
-
-      <div class="mb-4">
-        <h2 style="font-size:1.2rem;margin-bottom:.2rem;">Revisión técnica</h2>
-        <p style="color:var(--text-secondary);font-size:.85rem;margin:0;">
-          Paso 2 de 4 — Documentación y estado exterior
-        </p>
+    <!-- REVISIÓN TÉCNICA -->
+    <section id="view-revision" class="view">
+      <div style="margin-bottom:2rem;">
+        <h2 style="font-family:'Outfit',sans-serif;font-size:1.8rem;font-weight:800;">Revisión técnica</h2>
+        <p style="color:var(--text-secondary);font-size:0.95rem;margin-top:0.3rem;">Paso 2 de 4 — Documentación y estado exterior</p>
       </div>
 
       <div class="steps">
@@ -616,124 +451,45 @@
         <div>
           <div class="vb-label">Vehículo en revisión</div>
           <div class="vb-name" id="bannerNombre">Sin especificar</div>
-          <div class="vb-sub"  id="bannerSub">—</div>
-        </div>
-        <i class="bi bi-car-front-fill" style="font-size:2.8rem;color:var(--accent);opacity:.35;"></i>
-      </div>
-
-      <div class="row g-3">
-        <div class="col-12 col-lg-8">
-          <div class="card-dark">
-            <div class="cd-body">
-
-              <div class="form-section-title">
-                <i class="bi bi-file-text-fill"></i> Documentación legal
-              </div>
-              <div class="check-item"><label>SOAT vigente</label>
-                <div class="check-options">
-                  <button class="btn-opt bueno"   onclick="selectOpt(this)">Bueno</button>
-                  <button class="btn-opt regular" onclick="selectOpt(this)">Regular</button>
-                  <button class="btn-opt malo"    onclick="selectOpt(this)">Malo</button>
-                </div>
-              </div>
-              <div class="check-item"><label>Tecnicomecánica</label>
-                <div class="check-options">
-                  <button class="btn-opt bueno"   onclick="selectOpt(this)">Bueno</button>
-                  <button class="btn-opt regular" onclick="selectOpt(this)">Regular</button>
-                  <button class="btn-opt malo"    onclick="selectOpt(this)">Malo</button>
-                </div>
-              </div>
-              <div class="check-item"><label>Tarjeta de propiedad</label>
-                <div class="check-options">
-                  <button class="btn-opt bueno"   onclick="selectOpt(this)">Bueno</button>
-                  <button class="btn-opt regular" onclick="selectOpt(this)">Regular</button>
-                  <button class="btn-opt malo"    onclick="selectOpt(this)">Malo</button>
-                </div>
-              </div>
-              <div class="check-item"><label>Impuesto vehicular al día</label>
-                <div class="check-options">
-                  <button class="btn-opt bueno"   onclick="selectOpt(this)">Bueno</button>
-                  <button class="btn-opt regular" onclick="selectOpt(this)">Regular</button>
-                  <button class="btn-opt malo"    onclick="selectOpt(this)">Malo</button>
-                </div>
-              </div>
-              <div class="check-item"><label>Sin comparendos pendientes</label>
-                <div class="check-options">
-                  <button class="btn-opt bueno"   onclick="selectOpt(this)">Bueno</button>
-                  <button class="btn-opt regular" onclick="selectOpt(this)">Regular</button>
-                  <button class="btn-opt malo"    onclick="selectOpt(this)">Malo</button>
-                </div>
-              </div>
-
-              <div class="form-section-title mt-4">
-                <i class="bi bi-shield-check"></i> Estado exterior
-              </div>
-              <div class="check-item"><label>Carrocería sin golpes visibles</label>
-                <div class="check-options">
-                  <button class="btn-opt bueno"   onclick="selectOpt(this)">Bueno</button>
-                  <button class="btn-opt regular" onclick="selectOpt(this)">Regular</button>
-                  <button class="btn-opt malo"    onclick="selectOpt(this)">Malo</button>
-                </div>
-              </div>
-              <div class="check-item"><label>Pintura en buen estado</label>
-                <div class="check-options">
-                  <button class="btn-opt bueno"   onclick="selectOpt(this)">Bueno</button>
-                  <button class="btn-opt regular" onclick="selectOpt(this)">Regular</button>
-                  <button class="btn-opt malo"    onclick="selectOpt(this)">Malo</button>
-                </div>
-              </div>
-              <div class="check-item"><label>Vidrios y espejos sin daños</label>
-                <div class="check-options">
-                  <button class="btn-opt bueno"   onclick="selectOpt(this)">Bueno</button>
-                  <button class="btn-opt regular" onclick="selectOpt(this)">Regular</button>
-                  <button class="btn-opt malo"    onclick="selectOpt(this)">Malo</button>
-                </div>
-              </div>
-
-              <div class="mt-3">
-                <label class="form-label">Observaciones técnicas</label>
-                <textarea class="form-control" rows="3" id="obsRevision" placeholder="Notas adicionales…"></textarea>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-12 col-lg-4">
-          <div class="card-dark mb-3">
-            <div class="cd-header">Puntaje técnico</div>
-            <div class="cd-body text-center">
-              <div style="font-family:'Syne',sans-serif;font-size:2.8rem;font-weight:800;"
-                   id="scoreTecnico">0</div>
-              <div style="color:var(--text-secondary);font-size:.8rem;margin-bottom:.8rem;">de 100 puntos</div>
-              <div class="score-bar-track">
-                <div class="score-bar-fill" id="barTecnico" style="width:0%;background:var(--accent);"></div>
-              </div>
-              <div class="mt-2" style="font-size:.75rem;color:var(--text-secondary);">
-                Bueno = 10 pts · Regular = 5 pts · Malo = 0 pts
-              </div>
-            </div>
-          </div>
-          <div class="d-grid gap-2">
-            <button class="btn-primary-dark justify-content-center" onclick="avanzarRevision()">
-              Continuar <i class="bi bi-arrow-right ms-1"></i>
-            </button>
-            <button class="btn-ghost justify-content-center" onclick="showView('registro')">
-              <i class="bi bi-arrow-left me-1"></i> Volver
-            </button>
-          </div>
+          <div class="vb-sub" id="bannerSub">—</div>
         </div>
       </div>
 
-    </div>
+      <div class="checklist-section">
+        <div class="checklist-section-title"><i class="bi bi-file-earmark-text-fill"></i> Documentación legal</div>
+        <div id="checklistRevisionDocs"></div>
+      </div>
 
+      <div class="checklist-section">
+        <div class="checklist-section-title"><i class="bi bi-car-front-fill"></i> Estado exterior</div>
+        <div id="checklistRevisionExt"></div>
+      </div>
 
-    <div class="view" id="view-mecanica">
+      <div class="score-display">
+        <div class="score-header">
+          <span class="score-label">Puntaje técnico</span>
+          <span class="score-value" id="scoreTecnico">0</span>
+        </div>
+        <div class="score-bar-track"><div class="score-bar-fill" id="barTecnico" style="width:0%;"></div></div>
+        <div class="score-legend">Bueno = 10 pts · Regular = 5 pts · Malo = 0 pts</div>
+      </div>
 
-      <div class="mb-4">
-        <h2 style="font-size:1.2rem;margin-bottom:.2rem;">Revisión mecánica</h2>
-        <p style="color:var(--text-secondary);font-size:.85rem;margin:0;">
-          Paso 3 de 4 — Estado mecánico del vehículo
-        </p>
+      <div style="margin-bottom:1.5rem;">
+        <label class="form-label">Observaciones técnicas</label>
+        <textarea id="obsRevision" class="form-control" rows="3" style="resize:vertical;"></textarea>
+      </div>
+
+      <div style="display:flex;gap:1rem;">
+        <button class="btn-ghost" onclick="volverAlPaso('registro')"><i class="bi bi-arrow-left"></i> Volver</button>
+        <button class="btn-primary-dark" style="margin-left:auto;" onclick="avanzarRevision()">Continuar <i class="bi bi-arrow-right"></i></button>
+      </div>
+    </section>
+
+    <!-- REVISIÓN MECÁNICA -->
+    <section id="view-mecanica" class="view">
+      <div style="margin-bottom:2rem;">
+        <h2 style="font-family:'Outfit',sans-serif;font-size:1.8rem;font-weight:800;">Revisión mecánica</h2>
+        <p style="color:var(--text-secondary);font-size:0.95rem;margin-top:0.3rem;">Paso 3 de 4 — Estado mecánico del vehículo</p>
       </div>
 
       <div class="steps">
@@ -745,175 +501,60 @@
 
       <div class="vehicle-banner">
         <div>
-          <div class="vb-label">Revisión mecánica</div>
-          <div class="vb-name" id="bannerNombre">Sin especificar</div>
-          <div class="vb-sub"  id="bannerSub">—</div>
+          <div class="vb-label">Vehículo en revisión</div>
+          <div class="vb-name" id="bannerNombre2">Sin especificar</div>
+          <div class="vb-sub" id="bannerSub2">—</div>
         </div>
-        <i class="bi bi-tools" style="font-size:2.4rem;color:var(--accent);opacity:.35;"></i>
       </div>
 
-      <div class="row g-3">
-        <div class="col-12 col-lg-8">
-          <div class="card-dark">
-            <div class="cd-body">
+      <div class="checklist-section">
+        <div class="checklist-section-title"><i class="bi bi-gear-fill"></i> Motor y transmisión</div>
+        <div id="checklistMecanicaMotor"></div>
+      </div>
 
-              <div class="form-section-title">
-                <i class="bi bi-gear-fill"></i> Motor y transmisión
-              </div>
-              <div class="check-item"><label>Estado general del motor</label>
-                <div class="check-options">
-                  <button class="btn-opt bueno"   onclick="selectOpt(this)">Bueno</button>
-                  <button class="btn-opt regular" onclick="selectOpt(this)">Regular</button>
-                  <button class="btn-opt malo"    onclick="selectOpt(this)">Malo</button>
-                </div>
-              </div>
-              <div class="check-item"><label>Transmisión y caja de cambios</label>
-                <div class="check-options">
-                  <button class="btn-opt bueno"   onclick="selectOpt(this)">Bueno</button>
-                  <button class="btn-opt regular" onclick="selectOpt(this)">Regular</button>
-                  <button class="btn-opt malo"    onclick="selectOpt(this)">Malo</button>
-                </div>
-              </div>
-              <div class="check-item"><label>Sistema de enfriamiento</label>
-                <div class="check-options">
-                  <button class="btn-opt bueno"   onclick="selectOpt(this)">Bueno</button>
-                  <button class="btn-opt regular" onclick="selectOpt(this)">Regular</button>
-                  <button class="btn-opt malo"    onclick="selectOpt(this)">Malo</button>
-                </div>
-              </div>
-              <div class="check-item"><label>Sin fugas de aceite o líquidos</label>
-                <div class="check-options">
-                  <button class="btn-opt bueno"   onclick="selectOpt(this)">Bueno</button>
-                  <button class="btn-opt regular" onclick="selectOpt(this)">Regular</button>
-                  <button class="btn-opt malo"    onclick="selectOpt(this)">Malo</button>
-                </div>
-              </div>
+      <div class="checklist-section">
+        <div class="checklist-section-title"><i class="bi bi-disc-fill"></i> Frenos y suspensión</div>
+        <div id="checklistMecanicaFrenos"></div>
+      </div>
 
-              <div class="form-section-title mt-4">
-                <i class="bi bi-shield-shaded"></i> Frenos y suspensión
-              </div>
-              <div class="check-item"><label>Frenos delanteros</label>
-                <div class="check-options">
-                  <button class="btn-opt bueno"   onclick="selectOpt(this)">Bueno</button>
-                  <button class="btn-opt regular" onclick="selectOpt(this)">Regular</button>
-                  <button class="btn-opt malo"    onclick="selectOpt(this)">Malo</button>
-                </div>
-              </div>
-              <div class="check-item"><label>Frenos traseros</label>
-                <div class="check-options">
-                  <button class="btn-opt bueno"   onclick="selectOpt(this)">Bueno</button>
-                  <button class="btn-opt regular" onclick="selectOpt(this)">Regular</button>
-                  <button class="btn-opt malo"    onclick="selectOpt(this)">Malo</button>
-                </div>
-              </div>
-              <div class="check-item"><label>Suspensión delantera</label>
-                <div class="check-options">
-                  <button class="btn-opt bueno"   onclick="selectOpt(this)">Bueno</button>
-                  <button class="btn-opt regular" onclick="selectOpt(this)">Regular</button>
-                  <button class="btn-opt malo"    onclick="selectOpt(this)">Malo</button>
-                </div>
-              </div>
-              <div class="check-item"><label>Suspensión trasera</label>
-                <div class="check-options">
-                  <button class="btn-opt bueno"   onclick="selectOpt(this)">Bueno</button>
-                  <button class="btn-opt regular" onclick="selectOpt(this)">Regular</button>
-                  <button class="btn-opt malo"    onclick="selectOpt(this)">Malo</button>
-                </div>
-              </div>
+      <div class="checklist-section">
+        <div class="checklist-section-title"><i class="bi bi-lightning-fill"></i> Eléctrico e interior</div>
+        <div id="checklistMecanicaElec"></div>
+      </div>
 
-              <div class="form-section-title mt-4">
-                <i class="bi bi-lightning-charge-fill"></i> Eléctrico e interior
-              </div>
-              <div class="check-item"><label>Batería</label>
-                <div class="check-options">
-                  <button class="btn-opt bueno"   onclick="selectOpt(this)">Bueno</button>
-                  <button class="btn-opt regular" onclick="selectOpt(this)">Regular</button>
-                  <button class="btn-opt malo"    onclick="selectOpt(this)">Malo</button>
-                </div>
-              </div>
-              <div class="check-item"><label>Luces y sistema eléctrico</label>
-                <div class="check-options">
-                  <button class="btn-opt bueno"   onclick="selectOpt(this)">Bueno</button>
-                  <button class="btn-opt regular" onclick="selectOpt(this)">Regular</button>
-                  <button class="btn-opt malo"    onclick="selectOpt(this)">Malo</button>
-                </div>
-              </div>
-              <div class="check-item"><label>Tapicería e interior</label>
-                <div class="check-options">
-                  <button class="btn-opt bueno"   onclick="selectOpt(this)">Bueno</button>
-                  <button class="btn-opt regular" onclick="selectOpt(this)">Regular</button>
-                  <button class="btn-opt malo"    onclick="selectOpt(this)">Malo</button>
-                </div>
-              </div>
-              <div class="check-item"><label>Llantas y rines</label>
-                <div class="check-options">
-                  <button class="btn-opt bueno"   onclick="selectOpt(this)">Bueno</button>
-                  <button class="btn-opt regular" onclick="selectOpt(this)">Regular</button>
-                  <button class="btn-opt malo"    onclick="selectOpt(this)">Malo</button>
-                </div>
-              </div>
+      <div style="margin-bottom:1.5rem;">
+        <label class="form-label">Observaciones del técnico mecánico</label>
+        <textarea id="obsMecanica" class="form-control" rows="3" style="resize:vertical;"></textarea>
+      </div>
 
-              <div class="mt-3">
-                <label class="form-label">Observaciones del técnico mecánico</label>
-                <textarea class="form-control" rows="3" id="obsMecanica" placeholder="Notas del mecánico…"></textarea>
-              </div>
-            </div>
+      <div class="score-display">
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;">
+          <div>
+            <div class="score-header"><span class="score-label">Técnico</span><span class="score-value" id="miniPT">0</span></div>
+            <div class="score-bar-track"><div class="score-bar-fill" id="barTecnico2" style="width:0%;"></div></div>
           </div>
-        </div>
-
-        <div class="col-12 col-lg-4">
-          <div class="card-dark mb-3">
-            <div class="cd-header">Puntaje mecánico</div>
-            <div class="cd-body text-center">
-              <div style="font-family:'Syne',sans-serif;font-size:2.8rem;font-weight:800;"
-                   id="scoreMecanico">0</div>
-              <div style="color:var(--text-secondary);font-size:.8rem;margin-bottom:.8rem;">de 100 puntos</div>
-              <div class="score-bar-track">
-                <div class="score-bar-fill" id="barMecanico" style="width:0%;background:var(--accent);"></div>
-              </div>
-            </div>
+          <div>
+            <div class="score-header"><span class="score-label">Mecánico</span><span class="score-value" id="miniPM">0</span></div>
+            <div class="score-bar-track"><div class="score-bar-fill" id="barMecanico" style="width:0%;"></div></div>
           </div>
-
-          <div class="card-dark mb-3">
-            <div class="cd-header">Resumen de puntajes</div>
-            <div class="cd-body" style="font-size:.85rem;">
-              <div class="d-flex justify-content-between mb-2">
-                <span style="color:var(--text-secondary);">Puntaje técnico</span>
-                <strong id="miniPT">0 / 100</strong>
-              </div>
-              <div class="d-flex justify-content-between mb-2">
-                <span style="color:var(--text-secondary);">Puntaje mecánico</span>
-                <strong id="miniPM">0 / 100</strong>
-              </div>
-              <hr style="border-color:var(--border);margin:.65rem 0;">
-              <div class="d-flex justify-content-between">
-                <span style="color:var(--text-secondary);">Combinado</span>
-                <strong style="color:var(--accent);" id="scoreCombinado">0 / 100</strong>
-              </div>
-            </div>
-          </div>
-
-          <div class="d-grid gap-2">
-            <button class="btn-primary-dark justify-content-center" onclick="avanzarMecanica()">
-              Ver valuación <i class="bi bi-arrow-right ms-1"></i>
-            </button>
-            <button class="btn-ghost justify-content-center" onclick="showView('revision')">
-              <i class="bi bi-arrow-left me-1"></i> Volver
-            </button>
+          <div>
+            <div class="score-header"><span class="score-label">Combinado</span><span class="score-value" id="scoreCombinado">0</span></div>
+            <div class="score-bar-track"><div class="score-bar-fill" id="barCombinado" style="width:0%;"></div></div>
           </div>
         </div>
       </div>
 
-    </div>
+      <div style="display:flex;gap:1rem;">
+        <button class="btn-ghost" onclick="volverAlPaso('revision')"><i class="bi bi-arrow-left"></i> Volver</button>
+        <button class="btn-primary-dark" style="margin-left:auto;" onclick="avanzarMecanica()">Ver valuación <i class="bi bi-arrow-right"></i></button>
+      </div>
+    </section>
 
-
-    <div class="view" id="view-valuacion">
-
-      <div class="mb-4">
-        <h2 style="font-size:1.2rem;margin-bottom:.2rem;">Valuación y precio de venta</h2>
-        <p style="color:var(--text-secondary);font-size:.85rem;margin:0;">
-          Paso 4 de 4 — Resultado final
-        </p>
+    <!-- VALUACIÓN -->
+    <section id="view-valuacion" class="view">
+      <div style="margin-bottom:2rem;">
+        <h2 style="font-family:'Outfit',sans-serif;font-size:1.8rem;font-weight:800;">Valuación y precio de venta</h2>
+        <p style="color:var(--text-secondary);font-size:0.95rem;margin-top:0.3rem;">Paso 4 de 4 — Resultado final</p>
       </div>
 
       <div class="steps">
@@ -923,264 +564,219 @@
         <div class="step active">4. Valuación</div>
       </div>
 
-      <div class="row g-3">
-
-
-        <div class="col-12 col-lg-5">
-          <div class="precio-card mb-3">
-            <div class="pc-label">Precio de venta sugerido</div>
-            <div class="pc-value" id="val_precio_grande">—</div>
-            <div class="pc-tag"   id="val_tag_desc">Descuento: —</div>
-
-            <div style="margin-top:1.25rem;border-top:1px solid rgba(255,255,255,.18);padding-top:1rem;">
-              <div class="d-flex justify-content-between mb-2"
-                   style="font-size:.82rem;opacity:.8;">
-                <span>Precio base (según año)</span>
-                <span id="val_base">—</span>
-              </div>
-              <div class="d-flex justify-content-between mb-2"
-                   style="font-size:.82rem;opacity:.8;">
-                <span>Descuento (<span id="val_desc_pct">—</span>)</span>
-                <span id="val_desc_val">—</span>
-              </div>
-              <hr style="border-color:rgba(255,255,255,.18);">
-              <div class="d-flex justify-content-between"
-                   style="font-weight:700;font-size:1rem;">
-                <span>Total</span><span id="val_final_row">—</span>
-              </div>
-            </div>
-          </div>
-
-
-          <div class="card-dark mb-3">
-            <div class="cd-header">
-              <span><i class="bi bi-table me-1" style="color:var(--accent);"></i>Tabla de descuentos</span>
-            </div>
-            <div class="cd-body p-0">
-              <table class="tbl" style="font-size:.82rem;">
-                <thead>
-                  <tr><th>Puntaje combinado</th><th>Descuento</th></tr>
-                </thead>
-                <tbody>
-                  <tr><td>95 – 100</td><td><span class="badge-ok">0%</span></td></tr>
-                  <tr><td>85 – 94</td><td><span class="badge-ok">5%</span></td></tr>
-                  <tr><td>75 – 84</td><td><span class="badge-ok">12%</span></td></tr>
-                  <tr><td>65 – 74</td><td><span class="badge-pend">20%</span></td></tr>
-                  <tr><td>55 – 64</td><td><span class="badge-pend">30%</span></td></tr>
-                  <tr><td>45 – 54</td><td><span class="badge-pend">42%</span></td></tr>
-                  <tr><td>35 – 44</td><td><span class="badge-sold">55%</span></td></tr>
-                  <tr><td>0 – 34</td><td><span class="badge-sold">65%</span></td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-
-          <div class="card-dark">
-            <div class="cd-header">Ajuste manual de precio</div>
-            <div class="cd-body">
-              <label class="form-label">Precio final (COP)</label>
-              <div class="input-group mb-3">
-                <span class="input-group-text">$</span>
-                <input type="number" class="form-control"
-                       id="inp_precioFinal" oninput="onPrecioManualChange()">
-              </div>
-              <label class="form-label">Justificación (opcional)</label>
-              <textarea class="form-control" rows="2" id="justPrecio"
-                        placeholder="Ej: ajuste por demanda del mercado…"></textarea>
-            </div>
-          </div>
+      <div style="display:grid;grid-template-columns:1.3fr 1fr;gap:1.5rem;margin-bottom:1.5rem;">
+        <div class="precio-card">
+          <div class="pc-label">Precio de venta sugerido</div>
+          <div class="pc-value" id="val_precio_grande">—</div>
+          <div class="pc-tag" id="val_tag_desc">Descuento: —</div>
         </div>
-
-
-        <div class="col-12 col-lg-7">
-          <div class="card-dark mb-3">
-            <div class="cd-header">Resumen de la evaluación</div>
-            <div class="cd-body">
-
-              <div class="row g-3 mb-3">
-                <div class="col-6">
-                  <div class="stat-card">
-                    <div>
-                      <div class="stat-label">Puntaje técnico</div>
-                      <div class="stat-value" style="font-size:1.45rem;" id="val_pt">
-                        0<span style="font-size:.8rem;color:var(--text-secondary);"> /100</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-6">
-                  <div class="stat-card">
-                    <div>
-                      <div class="stat-label">Puntaje mecánico</div>
-                      <div class="stat-value" style="font-size:1.45rem;" id="val_pm">
-                        0<span style="font-size:.8rem;color:var(--text-secondary);"> /100</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="mb-3">
-                <div class="d-flex justify-content-between mb-1"
-                     style="font-size:.8rem;color:var(--text-secondary);">
-                  <span>Puntaje combinado</span>
-                  <strong style="color:var(--text-primary);" id="val_combinado">0 / 100</strong>
-                </div>
-                <div class="score-bar-track">
-                  <div class="score-bar-fill" id="barCombinado" style="width:0%;"></div>
-                </div>
-              </div>
-
-              <div class="form-section-title">
-                <i class="bi bi-car-front-fill"></i> Datos del vehículo
-              </div>
-              <table class="tbl" style="font-size:.84rem;">
-                <tbody>
-                  <tr><td style="color:var(--text-secondary);width:38%;">Vehículo</td>
-                      <td><strong id="val_vehiculo">—</strong></td></tr>
-                  <tr><td style="color:var(--text-secondary);">Placa</td>
-                      <td id="val_placa">—</td></tr>
-                  <tr><td style="color:var(--text-secondary);">Kilometraje</td>
-                      <td id="val_km">—</td></tr>
-                  <tr><td style="color:var(--text-secondary);">Color</td>
-                      <td id="val_color">—</td></tr>
-                  <tr><td style="color:var(--text-secondary);">Propietario</td>
-                      <td id="val_propietario">—</td></tr>
-                </tbody>
-              </table>
-            </div>
+        <div class="card-dark">
+          <div class="cd-header"><span>Desglose</span></div>
+          <div class="cd-body">
+            <table style="width:100%;font-size:0.9rem;">
+              <tr><td style="color:var(--text-secondary);padding:0.5rem 0;">Precio base (según año)</td><td style="text-align:right;font-weight:600;" id="val_base">—</td></tr>
+              <tr><td style="color:var(--text-secondary);padding:0.5rem 0;">Descuento (<span id="val_desc_pct">—</span>)</td><td style="text-align:right;font-weight:600;color:var(--danger);" id="val_desc_val">—</td></tr>
+              <tr style="border-top:1px solid var(--border);"><td style="padding:0.75rem 0;font-weight:700;">Total</td><td style="text-align:right;font-family:'Outfit',sans-serif;font-weight:900;font-size:1.2rem;color:var(--accent);" id="val_final_row">—</td></tr>
+            </table>
           </div>
-
-
-          <button class="btn-primary-dark w-100 justify-content-center"
-                  style="padding:.65rem;"
-                  onclick="registrarAutoFinal()">
-            <i class="bi bi-check-circle-fill me-1"></i> Confirmar y registrar auto
-          </button>
-
         </div>
       </div>
 
-    </div>
+      <div class="card-dark" style="margin-bottom:1.5rem;">
+        <div class="cd-header"><span>Tabla de descuentos</span></div>
+        <div class="cd-body" style="padding:0;">
+          <table class="tbl">
+            <thead><tr><th>Puntaje combinado</th><th>Descuento</th></tr></thead>
+            <tbody>
+              <tr><td>95 – 100</td><td><span class="badge-ok">0%</span></td></tr>
+              <tr><td>85 – 94</td><td><span class="badge-ok">5%</span></td></tr>
+              <tr><td>75 – 84</td><td><span class="badge-ok">12%</span></td></tr>
+              <tr><td>65 – 74</td><td><span class="badge-pend">20%</span></td></tr>
+              <tr><td>55 – 64</td><td><span class="badge-pend">30%</span></td></tr>
+              <tr><td>45 – 54</td><td><span class="badge-pend">42%</span></td></tr>
+              <tr><td>35 – 44</td><td><span class="badge-sold">55%</span></td></tr>
+              <tr><td>0 – 34</td><td><span class="badge-sold">65%</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
 
-  </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1.5rem;">
+        <div class="card-dark">
+          <div class="cd-header"><span>Ajuste manual de precio</span></div>
+          <div class="cd-body">
+            <label class="form-label">Precio final (COP)</label>
+            <input type="number" id="inp_precioFinal" class="form-control" min="0" step="100000" oninput="if(this.value<0)this.value=0" onchange="onPrecioManualChange()">
+            <label class="form-label" style="margin-top:1rem;">Justificación (opcional)</label>
+            <textarea id="justPrecio" class="form-control" rows="2" style="resize:vertical;"></textarea>
+          </div>
+        </div>
+        <div class="card-dark">
+          <div class="cd-header"><span>Resumen de la evaluación</span></div>
+          <div class="cd-body">
+            <div class="radial-gauges-grid">
+              <!-- Radial Gauge: Técnico -->
+              <div class="radial-gauge-card">
+                <div style="position:relative;width:120px;height:120px;display:flex;align-items:center;justify-content:center;">
+                  <svg class="radial-gauge-svg" viewBox="0 0 120 120">
+                    <circle class="radial-gauge-track" cx="60" cy="60" r="52"></circle>
+                    <circle id="gaugeCirclePT" class="radial-gauge-fill" cx="60" cy="60" r="52"></circle>
+                  </svg>
+                  <div class="radial-gauge-center">
+                    <span class="radial-gauge-val" id="val_pt">0</span>
+                    <span class="radial-gauge-max">/100</span>
+                  </div>
+                </div>
+                <span class="radial-gauge-label">Técnico</span>
+                <span class="radial-gauge-badge badge-pend" id="gaugeBadgePT">—</span>
+              </div>
+
+              <!-- Radial Gauge: Mecánico -->
+              <div class="radial-gauge-card">
+                <div style="position:relative;width:120px;height:120px;display:flex;align-items:center;justify-content:center;">
+                  <svg class="radial-gauge-svg" viewBox="0 0 120 120">
+                    <circle class="radial-gauge-track" cx="60" cy="60" r="52"></circle>
+                    <circle id="gaugeCirclePM" class="radial-gauge-fill" cx="60" cy="60" r="52"></circle>
+                  </svg>
+                  <div class="radial-gauge-center">
+                    <span class="radial-gauge-val" id="val_pm">0</span>
+                    <span class="radial-gauge-max">/100</span>
+                  </div>
+                </div>
+                <span class="radial-gauge-label">Mecánico</span>
+                <span class="radial-gauge-badge badge-pend" id="gaugeBadgePM">—</span>
+              </div>
+
+              <!-- Radial Gauge: Combinado -->
+              <div class="radial-gauge-card">
+                <div style="position:relative;width:120px;height:120px;display:flex;align-items:center;justify-content:center;">
+                  <svg class="radial-gauge-svg" viewBox="0 0 120 120">
+                    <circle class="radial-gauge-track" cx="60" cy="60" r="52"></circle>
+                    <circle id="gaugeCircleComb" class="radial-gauge-fill" cx="60" cy="60" r="52"></circle>
+                  </svg>
+                  <div class="radial-gauge-center">
+                    <span class="radial-gauge-val" id="val_combinado">0</span>
+                    <span class="radial-gauge-max">/100</span>
+                  </div>
+                </div>
+                <span class="radial-gauge-label">Combinado</span>
+                <span class="radial-gauge-badge badge-pend" id="gaugeBadgeComb">—</span>
+              </div>
+            </div>
+            <div style="font-size:0.85rem;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:0.75rem;">Datos del vehículo</div>
+            <table style="width:100%;font-size:0.9rem;">
+              <tr><td style="color:var(--text-secondary);padding:0.4rem 0;">Vehículo</td><td style="text-align:right;font-weight:600;" id="val_vehiculo">—</td></tr>
+              <tr><td style="color:var(--text-secondary);padding:0.4rem 0;">Placa</td><td style="text-align:right;font-weight:600;" id="val_placa">—</td></tr>
+              <tr><td style="color:var(--text-secondary);padding:0.4rem 0;">Kilometraje</td><td style="text-align:right;font-weight:600;" id="val_km">—</td></tr>
+              <tr><td style="color:var(--text-secondary);padding:0.4rem 0;">Color</td><td style="text-align:right;font-weight:600;" id="val_color">—</td></tr>
+              <tr><td style="color:var(--text-secondary);padding:0.4rem 0;">Propietario</td><td style="text-align:right;font-weight:600;" id="val_propietario">—</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:1rem;">
+        <button class="btn-ghost" onclick="volverAlPaso('mecanica')"><i class="bi bi-arrow-left"></i> Volver</button>
+        <button class="btn-primary-dark" id="btnConfirmarRegistro" style="margin-left:auto;padding:0.9rem 2rem;font-size:1rem;" onclick="registrarAutoFinal()">
+          <i class="bi bi-check-circle-fill"></i> Confirmar y registrar auto
+        </button>
+      </div>
+    </section>
+
+    <!-- ANALÍTICA -->
+    <section id="view-analitica" class="view">
+      <div style="margin-bottom:2rem;">
+        <h2 style="font-family:'Outfit',sans-serif;font-size:1.8rem;font-weight:800;">Analítica PowerBI</h2>
+        <p style="color:var(--text-secondary);font-size:0.95rem;margin-top:0.3rem;">Dashboard completo de indicadores</p>
+      </div>
+
+      <div class="bento-grid">
+        <div class="stat-card"><div class="stat-label">Autos Disponibles</div><div class="stat-value" style="color:var(--success);">882</div><div class="stat-icon" style="background:rgba(16,185,129,0.15);color:var(--success);"><i class="bi bi-check-circle-fill"></i></div></div>
+        <div class="stat-card"><div class="stat-label">En Revisión</div><div class="stat-value" style="color:var(--warning);">248</div><div class="stat-icon" style="background:rgba(245,158,11,0.15);color:var(--warning);"><i class="bi bi-hourglass-split"></i></div></div>
+        <div class="stat-card"><div class="stat-label">Autos Vendidos</div><div class="stat-value" style="color:var(--danger);">476</div><div class="stat-icon" style="background:rgba(239,68,68,0.15);color:var(--danger);"><i class="bi bi-bag-check-fill"></i></div></div>
+        <div class="stat-card"><div class="stat-label">Autos Totales</div><div class="stat-value">2.000</div><div class="stat-icon" style="background:rgba(0,212,255,0.15);color:var(--accent);"><i class="bi bi-car-front-fill"></i></div></div>
+        <div class="stat-card"><div class="stat-label">Propietarios</div><div class="stat-value">1.000</div><div class="stat-icon" style="background:rgba(139,92,246,0.15);color:#8b5cf6;"><i class="bi bi-people-fill"></i></div></div>
+        <div class="stat-card"><div class="stat-label">Valor Inventario</div><div class="stat-value" style="font-size:1.5rem;">$51 mil M</div><div class="stat-icon" style="background:rgba(245,158,11,0.15);color:var(--warning);"><i class="bi bi-cash-stack"></i></div></div>
+      </div>
+
+      <div class="card-dark">
+        <div class="cd-header"><span>Dashboard completo en PowerBI</span></div>
+        <div class="cd-body">
+          <p style="color:var(--text-secondary);font-size:1rem;line-height:1.6;margin-bottom:1.5rem;">Visualización interactiva con gráficos de autos por ciudad, marca, transmisión, año y mapa de Colombia.</p>
+          <a href="https://app.powerbi.com/view?r=eyJrIjoiMGYxNTlmYjEtOGJkNC00OGI5LWE1OTAtNzYyNGU4NmVjNmE5IiwidCI6IjlkMTJiZjNmLWU0ZjYtNDdhYi05MTJmLTFhMmYwZmM0OGFhNCIsImMiOjR9" target="_blank" class="btn-primary-dark"><i class="bi bi-box-arrow-up-right"></i> Abrir Dashboard completo en PowerBI</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
 </div>
 
-    <div class="view" id="view-analitica">
-      <div class="card-dark" style="margin-bottom:1rem;">
-        <div class="cd-header">
-          <span>
-            <i class="bi bi-bar-chart-fill me-2" style="color:var(--accent);"></i>
-            Analítica PowerBI
-          </span>
-        </div>
-        <div class="cd-body" style="padding:1.5rem;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:70vh;">
-
-          <!-- Tarjetas de métricas rápidas -->
-          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;margin-bottom:1.5rem;width:100%;max-width:900px;">
-            <div style="background:var(--bg-input);border:1px solid var(--border);border-radius:12px;padding:1.2rem;text-align:center;">
-              <div style="font-size:1.8rem;font-weight:800;color:#4ade80;">882</div>
-              <div style="font-size:.78rem;color:var(--text-secondary);margin-top:.2rem;">Autos Disponibles</div>
-            </div>
-            <div style="background:var(--bg-input);border:1px solid var(--border);border-radius:12px;padding:1.2rem;text-align:center;">
-              <div style="font-size:1.8rem;font-weight:800;color:#fbbf24;">248</div>
-              <div style="font-size:.78rem;color:var(--text-secondary);margin-top:.2rem;">En Revisión</div>
-            </div>
-            <div style="background:var(--bg-input);border:1px solid var(--border);border-radius:12px;padding:1.2rem;text-align:center;">
-              <div style="font-size:1.8rem;font-weight:800;color:#60a5fa;">476</div>
-              <div style="font-size:.78rem;color:var(--text-secondary);margin-top:.2rem;">Autos Vendidos</div>
-            </div>
-            <div style="background:var(--bg-input);border:1px solid var(--border);border-radius:12px;padding:1.2rem;text-align:center;">
-              <div style="font-size:1.8rem;font-weight:800;color:var(--accent);">2.000</div>
-              <div style="font-size:.78rem;color:var(--text-secondary);margin-top:.2rem;">Autos Totales</div>
-            </div>
-            <div style="background:var(--bg-input);border:1px solid var(--border);border-radius:12px;padding:1.2rem;text-align:center;">
-              <div style="font-size:1.8rem;font-weight:800;color:#a78bfa;">1.000</div>
-              <div style="font-size:.78rem;color:var(--text-secondary);margin-top:.2rem;">Propietarios</div>
-            </div>
-            <div style="background:var(--bg-input);border:1px solid var(--border);border-radius:12px;padding:1.2rem;text-align:center;">
-              <div style="font-size:1.5rem;font-weight:800;color:#f472b6;">$51 mil M</div>
-              <div style="font-size:.78rem;color:var(--text-secondary);margin-top:.2rem;">Valor Inventario</div>
-            </div>
-          </div>
-
-          <!-- Botón para abrir Power BI -->
-          <div style="background:linear-gradient(135deg,rgba(36,99,235,.15),rgba(124,58,237,.15));
-                      border:1px solid rgba(36,99,235,.3);border-radius:14px;
-                      padding:2rem;text-align:center;width:100%;max-width:900px;">
-            <i class="bi bi-bar-chart-fill" style="font-size:2.5rem;color:#2563eb;display:block;margin-bottom:.75rem;"></i>
-            <div style="font-weight:700;font-size:1.05rem;margin-bottom:.4rem;">Dashboard completo en PowerBI</div>
-            <div style="color:var(--text-secondary);font-size:.85rem;margin-bottom:1.2rem;">
-              Visualización interactiva con gráficos de autos por ciudad, marca, transmisión, año y mapa de Colombia.
-            </div>
-            <a href="https://app.powerbi.com/view?r=eyJrIjoiMGYxNTlmYjEtOGJkNC00OGI5LWE1OTAtNzYyNGU4NmVjNmE5IiwidCI6IjlkMTJiZjNmLWU0ZjYtNDdhYi05MTJmLTFhMmYwZmM0OGFhNCIsImMiOjR9"
-               target="_blank"
-               style="display:inline-flex;align-items:center;gap:.5rem;background:#2563eb;
-                      color:#fff;border-radius:9px;padding:.75rem 1.5rem;text-decoration:none;
-                      font-weight:600;font-size:.9rem;transition:opacity .15s;">
-              <i class="bi bi-box-arrow-up-right"></i>
-              Abrir Dashboard completo en PowerBI
-            </a>
-          </div>
-
-        </div>
-      </div>
-    </div>
-
-<div class="toast-msg" id="appToast"></div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="js/app.js?v=2"></script>
-
+<script src="js/app.js"></script>
 <script>
-document.addEventListener('DOMContentLoaded', () => {
-
-  const origRegistrar = registrarAutoFinal;
-  window.registrarAutoFinal = function() {
-    origRegistrar();
-    sincronizarTablaAutos();
-  };
-});
-
-function sincronizarTablaAutos() {
-  const tbody   = document.getElementById('autosTbody');
-  const conteo  = document.getElementById('autosConteo');
-  if (!tbody) return;
-
-  if (conteo) conteo.textContent = App.autos.length + ' registro' + (App.autos.length !== 1 ? 's' : '');
-
-  if (!App.autos.length) {
-    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--text-dim);">
-      <i class="bi bi-car-front" style="font-size:1.5rem;display:block;margin-bottom:.5rem;"></i>
-      No hay autos registrados aún</td></tr>`;
-    return;
+function abrirLogin() {
+  const modal = document.getElementById('loginModal');
+  if (modal) {
+    modal.style.removeProperty('display');
+    modal.classList.add('active');
   }
-
-  tbody.innerHTML = App.autos.map(a => {
-    const bc  = a.estado === 'Disponible' ? 'badge-ok' : a.estado === 'Vendido' ? 'badge-sold' : 'badge-pend';
-    const pre = a.precio ? '$' + Number(a.precio).toLocaleString('es-CO') : '—';
-    const km  = a.kilometraje ? Number(a.kilometraje).toLocaleString('es-CO') + ' km' : '—';
-    return `<tr>
-      <td><strong>${a.marca} ${a.modelo}</strong><br>
-          <small style="color:var(--text-secondary);">${a.color || ''}</small></td>
-      <td>${a.placa}</td>
-      <td>${a.año || '—'}</td>
-      <td>${km}</td>
-      <td><strong>${pre}</strong></td>
-      <td><span class="${bc}">${a.estado}</span></td>
-      <td>
-        <button class="btn-ghost" style="padding:.25rem .6rem;font-size:.75rem;margin-right:4px;">
-          <i class="bi bi-eye-fill"></i>
-        </button>
-        <button class="btn-ghost" style="padding:.25rem .6rem;font-size:.75rem;">
-          <i class="bi bi-pencil-fill"></i>
-        </button>
-      </td>
-    </tr>`;
-  }).join('');
+  const btn = document.getElementById('btnLogin');
+  if (btn) {
+    btn.disabled = false;
+    btn.innerHTML = 'Iniciar sesión';
+    delete btn.dataset.origHtml;
+  }
+  const btnCrear = document.getElementById('btnCrearCuenta');
+  if (btnCrear) {
+    btnCrear.disabled = false;
+    btnCrear.innerHTML = 'Crear cuenta';
+    delete btnCrear.dataset.origHtml;
+  }
+  const authMsg = document.getElementById('authMsg');
+  if (authMsg) {
+    authMsg.style.display = 'none';
+    authMsg.textContent = '';
+  }
+  const userInp = document.getElementById('loginUser');
+  if (userInp) setTimeout(() => userInp.focus(), 60);
 }
-</script>
+function cerrarLogin() {
+  const modal = document.getElementById('loginModal');
+  if (modal) {
+    modal.classList.remove('active');
+    modal.style.display = 'none';
+  }
+}
+document.getElementById('loginModal').addEventListener('click', function(e) { if (e.target === this) cerrarLogin(); });
 
+const CHECKLISTS = {
+  revision: { docs: ['SOAT vigente', 'Tecnicomecánica', 'Tarjeta de propiedad', 'Impuesto vehicular al día', 'Sin comparendos pendientes'], ext: ['Carrocería sin golpes visibles', 'Pintura en buen estado', 'Vidrios y espejos sin daños'] },
+  mecanica: { motor: ['Estado general del motor', 'Transmisión y caja de cambios', 'Sistema de enfriamiento', 'Sin fugas de aceite o líquidos'], frenos: ['Frenos delanteros', 'Frenos traseros', 'Suspensión delantera', 'Suspensión trasera'], elec: ['Batería', 'Luces y sistema eléctrico', 'Tapicería e interior', 'Llantas y rines'] }
+};
+
+function buildChecklist(containerId, items) {
+  const c = document.getElementById(containerId);
+  if (!c) return;
+  c.innerHTML = items.map(item => `<div class="check-item"><label>${item}</label><div class="check-options"><button class="btn-opt bueno" onclick="selectOpt(this)">Bueno</button><button class="btn-opt regular" onclick="selectOpt(this)">Regular</button><button class="btn-opt malo" onclick="selectOpt(this)">Malo</button></div></div>`).join('');
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  buildChecklist('checklistRevisionDocs', CHECKLISTS.revision.docs);
+  buildChecklist('checklistRevisionExt', CHECKLISTS.revision.ext);
+  buildChecklist('checklistMecanicaMotor', CHECKLISTS.mecanica.motor);
+  buildChecklist('checklistMecanicaFrenos', CHECKLISTS.mecanica.frenos);
+  buildChecklist('checklistMecanicaElec', CHECKLISTS.mecanica.elec);
+
+  const anioSel = Array.from(document.querySelectorAll('#view-autos .form-select'))[1];
+  if (anioSel) { const anioActual = new Date().getFullYear(); for (let y = anioActual; y >= 2015; y--) { const o = document.createElement('option'); o.value = o.textContent = y; anioSel.appendChild(o); } }
+
+  const precios = [20, 30, 40, 50, 60, 70, 90];
+  const minSel = document.getElementById('filtroPrecioMin');
+  const maxSel = document.getElementById('filtroPrecioMax');
+  const ordenSel = document.getElementById('filtroOrden');
+  if (minSel) precios.forEach(p => { const o = document.createElement('option'); o.value = p*1000000; o.textContent = '$'+p+' M'; minSel.appendChild(o); });
+  if (maxSel) precios.forEach(p => { const o = document.createElement('option'); o.value = p*1000000; o.textContent = '$'+p+' M'; maxSel.appendChild(o); });
+  if (ordenSel) { [['precio_asc','Precio: menor a mayor'],['precio_desc','Precio: mayor a menor'],['año_asc','Año: más antiguo'],['año_desc','Año: más reciente'],['km_asc','Km: menor a mayor'],['km_desc','Km: mayor a menor']].forEach(([v,t]) => { const o = document.createElement('option'); o.value = v; o.textContent = t; ordenSel.appendChild(o); }); }
+});
+</script>
 </body>
 </html>

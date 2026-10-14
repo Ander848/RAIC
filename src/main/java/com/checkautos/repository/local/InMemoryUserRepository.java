@@ -21,9 +21,11 @@ public class InMemoryUserRepository implements UserRepository {
     private final Map<String, User> store = new LinkedHashMap<>();
 
     public InMemoryUserRepository() {
-        save(new User("Ander",   "ander@checkautos.com",   "1234"));
-        save(new User("William", "william@checkautos.com", "1234"));
-        save(new User("Daniela", "daniela@checkautos.com", "1234"));
+        org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder encoder =
+                new org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder();
+        save(new User("Ander",   "ander@checkautos.com",   encoder.encode("1234")));
+        save(new User("William", "william@checkautos.com", encoder.encode("1234")));
+        save(new User("Daniela", "daniela@checkautos.com", encoder.encode("1234")));
     }
 
     @Override

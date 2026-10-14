@@ -33,7 +33,7 @@ public class AppUtils {
 
 
     public static boolean isValidPassword(String password) {
-        return password != null && password.length() >= 4;
+        return password != null && password.length() >= 8;
     }
 
 
@@ -42,8 +42,26 @@ public class AppUtils {
     }
 
 
+    /**
+     * Valida que la placa corresponda a un auto particular (3 letras y 3 números).
+     * Formatos válidos: ABC123 o ABC-123 (insensible a mayúsculas/minúsculas).
+     */
     public static boolean isValidPlate(String placa) {
-        return placa != null && !placa.trim().isEmpty();
+        if (placa == null) return false;
+        String clean = placa.trim().toUpperCase();
+        return clean.matches("^[A-Z]{3}-?\\d{3}$");
+    }
+
+    /**
+     * Normaliza la placa al formato estándar automotriz: AAA-123.
+     */
+    public static String formatPlate(String placa) {
+        if (placa == null) return "";
+        String clean = placa.trim().toUpperCase().replaceAll("[^A-Z0-9]", "");
+        if (clean.length() == 6 && clean.substring(0, 3).matches("[A-Z]{3}") && clean.substring(3).matches("\\d{3}")) {
+            return clean.substring(0, 3) + "-" + clean.substring(3);
+        }
+        return placa.trim().toUpperCase();
     }
 
 

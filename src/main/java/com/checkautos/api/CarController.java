@@ -47,6 +47,25 @@ public class CarController {
     }
 
 
+    /**
+     * Registro de auto atómico y sin estado (REST Stateless).
+     */
+    @PostMapping
+    public ResponseEntity<?> registrarAuto(@RequestBody Car car) {
+        if (car == null || car.getMarca() == null || car.getMarca().isBlank()
+                || car.getModelo() == null || car.getModelo().isBlank()
+                || car.getPlaca() == null || car.getPlaca().isBlank()) {
+            return ResponseEntity.badRequest().body(Map.of(
+                    "error", "Marca, modelo y placa son campos obligatorios"));
+        }
+        Car guardado = appContext.getCarManager().createAndSaveCar(car);
+        return ResponseEntity.status(201).body(Map.of(
+                "mensaje", "Auto registrado y guardado exitosamente",
+                "auto", guardado
+        ));
+    }
+
+
     @PostMapping("/nuevo")
     public ResponseEntity<?> nuevoCar() {
         appContext.startNewCarRegistration();
@@ -67,17 +86,36 @@ public class CarController {
 
         if (body.containsKey("marca"))           car.setMarca((String) body.get("marca"));
         if (body.containsKey("modelo"))          car.setModelo((String) body.get("modelo"));
-        if (body.containsKey("año"))             car.setAño((String) body.get("año"));
+        if (body.containsKey("año")) {
+            String anioStr = (String) body.get("año");
+            try {
+                if (anioStr != null && Integer.parseInt(anioStr.trim()) < 0) {
+                    return ResponseEntity.badRequest().body(Map.of("error", "El año no puede ser negativo"));
+                }
+            } catch (NumberFormatException ignored) {}
+            car.setAño(anioStr);
+        }
         if (body.containsKey("color"))           car.setColor((String) body.get("color"));
         if (body.containsKey("placa"))           car.setPlaca((String) body.get("placa"));
-        if (body.containsKey("kilometraje"))     car.setKilometraje((String) body.get("kilometraje"));
+        if (body.containsKey("kilometraje")) {
+            String kmStr = (String) body.get("kilometraje");
+            try {
+                if (kmStr != null && Double.parseDouble(kmStr.trim().replaceAll("[^\\d.-]", "")) < 0) {
+                    return ResponseEntity.badRequest().body(Map.of("error", "El kilometraje no puede ser negativo"));
+                }
+            } catch (NumberFormatException ignored) {}
+            car.setKilometraje(kmStr);
+        }
         if (body.containsKey("transmision"))     car.setTransmision((String) body.get("transmision"));
         if (body.containsKey("combustible"))     car.setCombustible((String) body.get("combustible"));
         if (body.containsKey("propietario"))     car.setPropietario((String) body.get("propietario"));
         if (body.containsKey("cedula"))          car.setCedula((String) body.get("cedula"));
         if (body.containsKey("nPropietarios"))   car.setNPropietarios((String) body.get("nPropietarios"));
-        if (body.containsKey("precio"))
-            car.setPrecio(((Number) body.get("precio")).intValue());
+        if (body.containsKey("precio")) {
+            int p = ((Number) body.get("precio")).intValue();
+            if (p < 0) return ResponseEntity.badRequest().body(Map.of("error", "El precio no puede ser negativo"));
+            car.setPrecio(p);
+        }
         if (body.containsKey("fechaRegistro"))
             car.setFechaRegistro((String) body.get("fechaRegistro"));
         if (body.containsKey("observacionRevision"))
@@ -85,10 +123,16 @@ public class CarController {
         if (body.containsKey("observacionMecanica"))
             car.setObservacionMecanica((String) body.get("observacionMecanica"));
 
-        if (body.containsKey("puntajeTecnico"))
-            car.setPuntajeTecnico(((Number) body.get("puntajeTecnico")).intValue());
-        if (body.containsKey("puntajeMecanico"))
-            car.setPuntajeMecanico(((Number) body.get("puntajeMecanico")).intValue());
+        if (body.containsKey("puntajeTecnico")) {
+            int pt = ((Number) body.get("puntajeTecnico")).intValue();
+            if (pt < 0) return ResponseEntity.badRequest().body(Map.of("error", "El puntaje técnico no puede ser negativo"));
+            car.setPuntajeTecnico(pt);
+        }
+        if (body.containsKey("puntajeMecanico")) {
+            int pm = ((Number) body.get("puntajeMecanico")).intValue();
+            if (pm < 0) return ResponseEntity.badRequest().body(Map.of("error", "El puntaje mecánico no puede ser negativo"));
+            car.setPuntajeMecanico(pm);
+        }
 
         return ResponseEntity.ok(Map.of("mensaje", "Auto actualizado", "auto", car));
     }
