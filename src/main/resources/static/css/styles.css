@@ -2080,32 +2080,43 @@ button:disabled {
   #sidebar:hover {
     width: 280px !important;
   }
-  #sidebar.open .sb-logo-text {
-    opacity: 1;
-    max-width: 150px;
-    transform: translateX(0);
-    pointer-events: auto;
+
+  /* Textos y etiquetas siempre visibles en el sidebar móvil */
+  #sidebar .sb-logo-text {
+    opacity: 1 !important;
+    max-width: 160px !important;
+    transform: none !important;
+    pointer-events: auto !important;
+    overflow: visible !important;
   }
-  #sidebar.open .sb-label {
-    opacity: 1;
-    max-height: 32px;
-    padding: 0.75rem 20px 0.35rem;
-    transform: translateY(0);
+  #sidebar .sb-label {
+    opacity: 1 !important;
+    max-height: 40px !important;
+    padding: 0.75rem 20px 0.35rem !important;
+    transform: none !important;
+    overflow: visible !important;
   }
-  #sidebar.open .sb-link-text {
-    opacity: 1;
-    transform: translateX(0);
+  #sidebar .sb-link-text {
+    opacity: 1 !important;
+    max-width: 175px !important;
+    transform: none !important;
+    pointer-events: auto !important;
+    overflow: visible !important;
   }
-  #sidebar.open .sb-lock {
-    opacity: 1;
+  #sidebar .sb-lock {
+    opacity: 0.7 !important;
+    max-width: 24px !important;
+    transform: none !important;
+    overflow: visible !important;
   }
-  #sidebar.open .sb-user-wrap {
-    opacity: 1;
-    max-width: 160px;
-    transform: translateX(0);
-    pointer-events: auto;
+  #sidebar .sb-user-wrap {
+    opacity: 1 !important;
+    max-width: 160px !important;
+    transform: none !important;
+    pointer-events: auto !important;
+    overflow: visible !important;
   }
-  #sidebar.open .btn-close-sidebar {
+  #sidebar .btn-close-sidebar {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -2121,7 +2132,7 @@ button:disabled {
     cursor: pointer;
     transition: all 0.2s;
   }
-  #sidebar.open .btn-close-sidebar:hover {
+  #sidebar .btn-close-sidebar:hover {
     color: var(--text-primary);
     background: rgba(255, 255, 255, 0.08);
   }
