@@ -123,6 +123,9 @@
     <div class="sb-logo">
       <div class="sb-logo-icon">RA</div>
       <div class="sb-logo-text">RAIC</div>
+      <button type="button" class="btn-close-sidebar" onclick="toggleSidebar(false)" aria-label="Cerrar menú">
+        <i class="bi bi-x-lg"></i>
+      </button>
     </div>
 
     <div class="sb-section">
@@ -169,12 +172,20 @@
     </div>
   </aside>
 
+  <!-- BACKDROP PARA MENÚ MÓVIL -->
+  <div id="sidebarBackdrop" class="sidebar-backdrop" onclick="toggleSidebar(false)"></div>
+
   <!-- TOPBAR -->
   <header id="topbar">
-    <div class="topbar-title" id="topbarTitle">Dashboard</div>
+    <div class="topbar-left-wrap">
+      <button type="button" id="btnToggleSidebar" class="btn-toggle-sidebar" onclick="toggleSidebar()" aria-label="Abrir menú de navegación">
+        <i class="bi bi-list"></i>
+      </button>
+      <div class="topbar-title" id="topbarTitle">Dashboard</div>
+    </div>
     <div class="topbar-right">
       <button class="btn-topbar-new" onclick="showView('registro')">
-        <i class="bi bi-plus-lg"></i> Nuevo auto
+        <i class="bi bi-plus-lg"></i> <span class="btn-topbar-new-txt">Nuevo auto</span>
       </button>
       <div class="topbar-user-pill">
         <div class="topbar-avatar" id="topbarAvatarTxt">AN</div>
@@ -282,12 +293,14 @@
           <a href="#" onclick="showView('autos');return false;" style="color:var(--accent);text-decoration:none;font-size:0.85rem;font-weight:600;">Ver todos <i class="bi bi-arrow-right"></i></a>
         </div>
         <div class="cd-body" style="padding:0;">
-          <table class="tbl">
-            <thead>
-              <tr><th>Vehículo</th><th>Año</th><th>Km</th><th>Precio</th><th>Estado</th><th></th></tr>
-            </thead>
-            <tbody id="dashboardTbody"></tbody>
-          </table>
+          <div class="tbl-responsive">
+            <table class="tbl">
+              <thead>
+                <tr><th>Vehículo</th><th>Año</th><th>Km</th><th>Precio</th><th>Estado</th><th></th></tr>
+              </thead>
+              <tbody id="dashboardTbody"></tbody>
+            </table>
+          </div>
         </div>
       </div>
     </section>
@@ -299,7 +312,7 @@
           <h2 style="font-family:'Outfit',sans-serif;font-size:1.8rem;font-weight:800;">Autos registrados</h2>
           <p style="color:var(--text-secondary);font-size:0.95rem;margin-top:0.3rem;">Historial completo de vehículos evaluados</p>
         </div>
-        <div style="display:flex;align-items:center;gap:1rem;">
+        <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;">
           <div class="view-mode-toggle">
             <button id="btnVistaTabla" class="btn-toggle-mode active" onclick="cambiarModoVistaAutos('tabla')">
               <i class="bi bi-table"></i> Tabla
@@ -316,12 +329,12 @@
 
       <div class="card-dark" style="margin-bottom:1.5rem;">
         <div class="cd-body">
-          <div style="display:grid;grid-template-columns:2fr 1fr 1fr;gap:1rem;margin-bottom:1rem;">
+          <div class="grid-autos-filtros-1">
             <div><label class="form-label">Buscar</label><input type="text" class="form-control" placeholder="Marca, modelo o placa..."></div>
             <div><label class="form-label">Estado</label><select class="form-select"><option>Todos</option><option>Disponible</option><option>En revisión</option><option>Vendido</option></select></div>
             <div><label class="form-label">Año</label><select class="form-select"><option>Todos</option></select></div>
           </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:1rem;">
+          <div class="grid-autos-filtros-2">
             <div><label class="form-label">Precio mínimo</label><select class="form-select" id="filtroPrecioMin"><option value="0">Sin mínimo</option></select></div>
             <div><label class="form-label">Precio máximo</label><select class="form-select" id="filtroPrecioMax"><option value="0">Sin máximo</option></select></div>
             <div><label class="form-label">Ordenar por</label><select class="form-select" id="filtroOrden"><option value="">Sin orden</option></select></div>
@@ -332,7 +345,7 @@
 
       <div class="card-dark">
         <div class="cd-body" style="padding:0;">
-          <div id="autosTableContainer">
+          <div id="autosTableContainer" class="tbl-responsive">
             <table class="tbl">
               <thead>
                 <tr><th>Vehículo</th><th>Placa</th><th>Año</th><th>Km</th><th>Precio</th><th>Estado</th><th class="col-acciones-admin">Acciones</th></tr>
@@ -363,17 +376,17 @@
         <div class="step">4. Valuación</div>
       </div>
 
-      <div style="display:grid;grid-template-columns:2fr 1fr;gap:1.5rem;">
+      <div class="grid-registro-layout">
         <div class="card-dark">
           <div class="cd-header">
             <span><i class="bi bi-car-front-fill" style="color:var(--accent);margin-right:8px;"></i> Información del vehículo</span>
           </div>
           <div class="cd-body">
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
+            <div class="grid-form-2col">
               <div><label class="form-label">Marca *</label><select id="inp_marca" class="form-select" onchange="actualizarModelos()"><option value="">Seleccionar…</option></select></div>
               <div><label class="form-label">Modelo *</label><select id="inp_modelo" class="form-select"><option value="">Selecciona una marca primero…</option></select></div>
             </div>
-            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-bottom:1rem;">
+            <div class="grid-form-3col">
               <div><label class="form-label">Año *</label><input type="number" id="inp_año" class="form-control" placeholder="Ej: 2022" list="listaAnios" min="1950" max="2035" oninput="if(this.value<0)this.value=Math.abs(this.value)"><datalist id="listaAnios"></datalist></div>
               <div><label class="form-label">Color</label><input type="text" id="inp_color" class="form-control" placeholder="Ej: Blanco perla"></div>
               <div>
@@ -382,22 +395,22 @@
                 <div id="placaFeedback" style="font-size:0.75rem;margin-top:4px;display:none;"></div>
               </div>
             </div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
+            <div class="grid-form-2col">
               <div><label class="form-label">Kilometraje *</label><div class="input-group"><input type="number" id="inp_kilometraje" class="form-control" placeholder="45000" min="0" step="1" oninput="if(this.value<0)this.value=Math.abs(this.value)"><span class="input-group-text">km</span></div></div>
               <div><label class="form-label">Transmisión</label><select id="inp_transmision" class="form-select"><option value="">Seleccionar…</option><option>Automática</option><option>Manual</option><option>CVT</option></select></div>
             </div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+            <div class="grid-form-2col">
               <div><label class="form-label">Combustible</label><select id="inp_combustible" class="form-select"><option value="">Seleccionar…</option><option>Gasolina</option><option>Diésel</option><option>Híbrido</option><option>Eléctrico</option></select></div>
               <div><label class="form-label">N.º propietarios</label><select id="inp_nPropietarios" class="form-select"><option value="">Seleccionar…</option><option>1 — Primer dueño</option><option>2</option><option>3 o más</option></select></div>
             </div>
 
             <div style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--border);">
               <h4 style="font-family:'Outfit',sans-serif;font-size:1.1rem;margin-bottom:1rem;"><i class="bi bi-person-fill" style="color:var(--accent);margin-right:8px;"></i> Datos del propietario</h4>
-              <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
+              <div class="grid-form-2col">
                 <div><label class="form-label">Nombre completo *</label><input type="text" id="inp_propietario" class="form-control" placeholder="Nombre del propietario"></div>
                 <div><label class="form-label">Cédula / NIT *</label><input type="text" id="inp_cedula" class="form-control" placeholder="Número de documento"></div>
               </div>
-              <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+              <div class="grid-form-2col">
                 <div><label class="form-label">Teléfono</label><input type="tel" id="inp_telefono" class="form-control" placeholder="300 000 0000"></div>
                 <div><label class="form-label">Correo electrónico</label><input type="email" id="inp_email" class="form-control" placeholder="correo@ejemplo.com"></div>
               </div>
@@ -414,7 +427,7 @@
           </div>
         </div>
 
-        <div class="card-dark" style="height:fit-content;position:sticky;top:90px;">
+        <div class="card-dark card-resumen-registro" style="height:fit-content;position:sticky;top:90px;">
           <div class="cd-header"><span>Resumen del registro</span></div>
           <div class="cd-body">
             <table style="width:100%;font-size:0.9rem;">
@@ -528,7 +541,7 @@
       </div>
 
       <div class="score-display">
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;">
+        <div class="grid-score-mini">
           <div>
             <div class="score-header"><span class="score-label">Técnico</span><span class="score-value" id="miniPT">0</span></div>
             <div class="score-bar-track"><div class="score-bar-fill" id="barTecnico2" style="width:0%;"></div></div>
@@ -564,7 +577,7 @@
         <div class="step active">4. Valuación</div>
       </div>
 
-      <div style="display:grid;grid-template-columns:1.3fr 1fr;gap:1.5rem;margin-bottom:1.5rem;">
+      <div class="grid-valuacion-top">
         <div class="precio-card">
           <div class="pc-label">Precio de venta sugerido</div>
           <div class="pc-value" id="val_precio_grande">—</div>
@@ -585,23 +598,25 @@
       <div class="card-dark" style="margin-bottom:1.5rem;">
         <div class="cd-header"><span>Tabla de descuentos</span></div>
         <div class="cd-body" style="padding:0;">
-          <table class="tbl">
-            <thead><tr><th>Puntaje combinado</th><th>Descuento</th></tr></thead>
-            <tbody>
-              <tr><td>95 – 100</td><td><span class="badge-ok">0%</span></td></tr>
-              <tr><td>85 – 94</td><td><span class="badge-ok">5%</span></td></tr>
-              <tr><td>75 – 84</td><td><span class="badge-ok">12%</span></td></tr>
-              <tr><td>65 – 74</td><td><span class="badge-pend">20%</span></td></tr>
-              <tr><td>55 – 64</td><td><span class="badge-pend">30%</span></td></tr>
-              <tr><td>45 – 54</td><td><span class="badge-pend">42%</span></td></tr>
-              <tr><td>35 – 44</td><td><span class="badge-sold">55%</span></td></tr>
-              <tr><td>0 – 34</td><td><span class="badge-sold">65%</span></td></tr>
-            </tbody>
-          </table>
+          <div class="tbl-responsive">
+            <table class="tbl">
+              <thead><tr><th>Puntaje combinado</th><th>Descuento</th></tr></thead>
+              <tbody>
+                <tr><td>95 – 100</td><td><span class="badge-ok">0%</span></td></tr>
+                <tr><td>85 – 94</td><td><span class="badge-ok">5%</span></td></tr>
+                <tr><td>75 – 84</td><td><span class="badge-ok">12%</span></td></tr>
+                <tr><td>65 – 74</td><td><span class="badge-pend">20%</span></td></tr>
+                <tr><td>55 – 64</td><td><span class="badge-pend">30%</span></td></tr>
+                <tr><td>45 – 54</td><td><span class="badge-pend">42%</span></td></tr>
+                <tr><td>35 – 44</td><td><span class="badge-sold">55%</span></td></tr>
+                <tr><td>0 – 34</td><td><span class="badge-sold">65%</span></td></tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
 
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1.5rem;">
+      <div class="grid-valuacion-bottom">
         <div class="card-dark">
           <div class="cd-header"><span>Ajuste manual de precio</span></div>
           <div class="cd-body">

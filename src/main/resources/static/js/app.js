@@ -399,7 +399,32 @@ const pageTitles = {
   analitica:'Analítica PowerBI',
 };
 
+function toggleSidebar(forzar) {
+  const sb = document.getElementById('sidebar');
+  const backdrop = document.getElementById('sidebarBackdrop');
+  if (!sb) return;
+  const debeAbrir = (typeof forzar === 'boolean') ? forzar : !sb.classList.contains('open');
+  if (debeAbrir) {
+    sb.classList.add('open');
+    if (backdrop) backdrop.classList.add('active');
+    if (window.innerWidth <= 768) {
+      document.body.style.overflow = 'hidden';
+    }
+  } else {
+    sb.classList.remove('open');
+    if (backdrop) backdrop.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+}
+
+window.addEventListener('resize', () => {
+  if (window.innerWidth > 768) {
+    toggleSidebar(false);
+  }
+});
+
 function showView(id) {
+  toggleSidebar(false);
   if (PASO_SOLO_ADMIN.includes(id) && !esAdmin()) {
     mostrarToast(' Solo los administradores pueden acceder a esta sección', 'warn');
     return;
