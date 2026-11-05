@@ -21,7 +21,7 @@ function esAdmin() {
 const PASO_VISTA = {
   dashboard:1, autos:1, registro:1,
   revision:2, mecanica:3, valuacion:4,
-  analitica:1,
+  informes:1, analitica:1,
 };
 
 const PASO_SOLO_ADMIN = ['registro','revision','mecanica','valuacion'];
@@ -489,7 +489,7 @@ function actualizarLocks() {
 const pageTitles = {
   dashboard:'Dashboard', autos:'Autos registrados', registro:'Registrar auto',
   revision:'Revisión técnica', mecanica:'Revisión mecánica', valuacion:'Valuación / Precio',
-  analitica:'Analítica PowerBI',
+  informes:'Consultar y Descargar Informes', analitica:'Analítica PowerBI',
 };
 
 function toggleSidebar(forzar) {
@@ -538,6 +538,7 @@ function showView(id) {
   if (id === 'valuacion') calcularValuacion();
   if (id === 'dashboard') cargarDashboard();
   if (id === 'autos') cargarVistaAutos();
+  if (id === 'informes') cargarVistaInformes();
 }
 
 async function cargarDashboard() {
@@ -1211,9 +1212,12 @@ async function registrarAutoFinal() {
       const err = await res?.json();
       mostrarToast(err?.error || 'Error al guardar el auto', 'warn'); return;
     }
+    const autoPlaca = a.placa;
     resetearAutoEnProceso();
-    mostrarToast('✓ Auto registrado y guardado exitosamente');
-    showView('dashboard');
+    mostrarToast('✓ Auto e informe técnico guardados exitosamente');
+    // Preguntar o llevar a consultar su informe
+    showView('informes');
+    buscarInformePorPlaca(autoPlaca);
   } catch (e) {
     mostrarToast('Error de conexión al guardar', 'warn'); return;
   } finally {
@@ -1678,6 +1682,171 @@ function mostrarToast(msg, tipo = 'ok') {
 function setTexto(id, val) {
   const el = document.getElementById(id);
   if (el) el.textContent = val;
+}
+
+// ═══════════════════════════════════════════════════════════
+// GESTIÓN Y CONSULTA DE INFORMES VEHICULARES (PDF / TXT)
+// ═══════════════════════════════════════════════════════════
+let _informeActual = null;
+
+async function cargarVistaInformes() {
+  const inp = document.getElementById('inpPlacaBuscarInforme');
+  if (inp && !inp.value) {
+    limpiarConsultaInforme();
+  }
+}
+
+async function buscarInformePorPlaca(placaParam) {
+  const inp = document.getElementById('inpPlacaBuscarInforme');
+  const btn = document.getElementById('btnBuscarInforme');
+  const msg = document.getElementById('informeMsgBusqueda');
+  const cont = document.getElementById('contenedorDetalleInforme');
+
+  let placa = placaParam || (inp ? inp.value.trim().toUpperCase() : '');
+  if (!placa) {
+    mostrarMsgBusquedaInforme('Ingresa una placa vehicular para buscar su informe.', 'warn');
+    if (inp) inp.focus();
+    return;
+  }
+
+  if (inp) inp.value = placa;
+  setBotonCargando(btn, true, 'Buscar informe', 'Consultando…');
+
+  try {
+    const res = await api('GET', `/api/informes/consultar?placa=${encodeURIComponent(placa)}`);
+    if (!res || !res.ok) {
+      const err = await res?.json();
+      const txtErr = err?.mensaje || err?.error || 'Vehículo no encontrado';
+      mostrarMsgBusquedaInforme(txtErr, 'error');
+      if (cont) cont.style.display = 'none';
+      _informeActual = null;
+      return;
+    }
+
+    const data = await res.json();
+    if (!data.encontrado || !data.informe) {
+      mostrarMsgBusquedaInforme('No se encontró informe para la placa ' + placa, 'error');
+      if (cont) cont.style.display = 'none';
+      _informeActual = null;
+      return;
+    }
+
+    _informeActual = data.informe;
+    renderizarDetalleInforme(_informeActual);
+    mostrarMsgBusquedaInforme('✓ Informe encontrado para la placa ' + _informeActual.placa, 'ok');
+
+  } catch (e) {
+    mostrarMsgBusquedaInforme('Error de conexión al consultar el informe.', 'error');
+  } finally {
+    setBotonCargando(btn, false, 'Buscar informe');
+  }
+}
+
+function renderizarDetalleInforme(inf) {
+  const cont = document.getElementById('contenedorDetalleInforme');
+  if (!cont || !inf) return;
+
+  // Header
+  setTexto('infBadgePlaca', inf.placa || '—');
+  setTexto('infTituloVehiculo', `${inf.marca || ''} ${inf.modelo || ''}`.trim() || 'Vehículo');
+  setTexto('infSubtituloVehiculo', `${inf.año || ''} · ${inf.color || ''} · Estado: ${inf.estado || 'Disponible'}`.trim());
+
+  // Vehículo
+  setTexto('infMarca', inf.marca || '—');
+  setTexto('infModelo', inf.modelo || '—');
+  setTexto('infAño', inf.año || '—');
+  setTexto('infColor', inf.color || '—');
+  setTexto('infKilometraje', inf.kilometraje ? Number(inf.kilometraje).toLocaleString('es-CO') + ' km' : '—');
+  setTexto('infTransmision', inf.transmision || '—');
+  setTexto('infCombustible', inf.combustible || '—');
+  setTexto('infPrecio', inf.precio ? '$ ' + Number(inf.precio).toLocaleString('es-CO') + ' COP' : '$ 0 COP');
+  setTexto('infEstado', inf.estado || 'Disponible');
+  setTexto('infNPropietarios', inf.nPropietarios || '1');
+
+  // Propietario
+  setTexto('infPropNombre', inf.propietarioNombre || 'No registrado');
+  setTexto('infPropCedula', inf.propietarioCedula || 'No registrada');
+  setTexto('infPropTelefono', inf.propietarioTelefono || 'No registrado');
+  setTexto('infPropEmail', inf.propietarioEmail || 'No registrado');
+  setTexto('infFechaRegistro', inf.fechaRegistro || '—');
+
+  // Puntajes y Observaciones
+  setTexto('infPuntajeTecnico', inf.puntajeTecnico || 0);
+  setTexto('infPuntajeMecanico', inf.puntajeMecanico || 0);
+  setTexto('infPuntajePromedio', inf.puntajePromedio || 0);
+
+  setTexto('infObsRevision', inf.observacionRevision || 'Sin observaciones técnicas.');
+  setTexto('infObsMecanica', inf.observacionMecanica || 'Sin observaciones mecánicas.');
+
+  cont.style.display = 'block';
+  cont.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function descargarInformeActual(formato) {
+  if (!_informeActual || !_informeActual.placa) {
+    mostrarToast('Primero busca y selecciona un informe para descargar', 'warn');
+    return;
+  }
+  descargarArchivoInforme(_informeActual.placa, formato);
+}
+
+async function descargarArchivoInforme(placa, formato = 'pdf') {
+  if (!placa) return;
+  mostrarToast(`Iniciando descarga de informe (${formato.toUpperCase()})…`);
+
+  try {
+    const url = `/api/informes/descargar/${encodeURIComponent(placa)}?formato=${formato}`;
+    const opts = { method: 'GET' };
+    if (App._token) {
+      opts.headers = { 'Authorization': 'Bearer ' + App._token };
+    }
+
+    const res = await fetch(url, opts);
+    if (!res.ok) {
+      mostrarToast('No se pudo descargar el archivo del informe', 'warn');
+      return;
+    }
+
+    const blob = await res.blob();
+    const downloadUrl = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = downloadUrl;
+    a.download = `informe_${placa.replaceAll('-', '')}.${formato.toLowerCase()}`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(downloadUrl);
+
+    mostrarToast(`✓ Informe de ${placa} descargado correctamente`);
+  } catch (e) {
+    mostrarToast('Error al procesar la descarga', 'warn');
+  }
+}
+
+function mostrarMsgBusquedaInforme(texto, tipo = 'info') {
+  const el = document.getElementById('informeMsgBusqueda');
+  if (!el) return;
+  el.style.display = 'block';
+  el.textContent = texto;
+  if (tipo === 'error') {
+    el.style.color = '#ef4444';
+  } else if (tipo === 'warn') {
+    el.style.color = '#f59e0b';
+  } else if (tipo === 'ok') {
+    el.style.color = '#10b981';
+  } else {
+    el.style.color = 'var(--text-secondary)';
+  }
+}
+
+function limpiarConsultaInforme() {
+  const inp = document.getElementById('inpPlacaBuscarInforme');
+  if (inp) inp.value = '';
+  const msg = document.getElementById('informeMsgBusqueda');
+  if (msg) { msg.style.display = 'none'; msg.textContent = ''; }
+  const cont = document.getElementById('contenedorDetalleInforme');
+  if (cont) cont.style.display = 'none';
+  _informeActual = null;
 }
 
 document.addEventListener('DOMContentLoaded', async () => {

@@ -1,0 +1,48 @@
+================================================================================
+          RAIC — CERTIFICADO OFICIAL DE INSPECCIÓN Y VALUACIÓN VEHICULAR         
+================================================================================
+Placa Vehicular:      AND-123
+Fecha de Expedición:  30/10/2026 23:18:31
+Estado en Sistema:    Vendido
+ID de Registro:       6acebb8cfab9740f0936f3e7
+
+--------------------------------------------------------------------------------
+1. INFORMACIÓN DEL VEHÍCULO
+--------------------------------------------------------------------------------
+Placa                   : AND-123
+Marca                   : GMC
+Modelo                  : Canyon
+Año de Fabricación      : 2024
+Color                   : Verde
+Kilometraje             : 1000000 km
+Transmisión             : Manual
+Combustible             : Gasolina
+Precio Valuado          : $ 75.050.000 COP
+N° Propietarios Previos : 1 — Primer dueño
+Fecha de Registro       : 13/10/2026
+
+--------------------------------------------------------------------------------
+2. INFORMACIÓN DEL PROPIETARIO
+--------------------------------------------------------------------------------
+Nombre Completo         : Anderson
+Cédula / Documento      : 1043299840
+Teléfono de Contacto    : 3226502683
+Correo Electrónico      : andervalencia848@gmail.com
+
+--------------------------------------------------------------------------------
+3. RESULTADOS DE REVISIÓN TÉCNICO-MECÁNICA
+--------------------------------------------------------------------------------
+Puntaje Revisión Técnica        : 81 / 100
+Puntaje Revisión Mecánica       : 88 / 100
+Puntaje Promedio General        : 84 / 100
+Concepto Calificación           : Buen estado general (Aprobado)
+
+Observaciones de Revisión Técnica (Documental y Estética):
+Sin observaciones técnicas registradas.
+
+Observaciones de Revisión Mecánica (Motor, Frenos, Suspensión):
+Sin observaciones mecánicas registradas.
+
+================================================================================
+Documento emitido electrónicamente por RAIC — Sistema de Gestión Vehicular.
+================================================================================

@@ -1,0 +1,48 @@
+================================================================================
+          RAIC — CERTIFICADO OFICIAL DE INSPECCIÓN Y VALUACIÓN VEHICULAR         
+================================================================================
+Placa Vehicular:      XCS-762
+Fecha de Expedición:  30/10/2026 23:18:29
+Estado en Sistema:    En revisión
+ID de Registro:       6ad1267e34fdd24a73b3e1b9
+
+--------------------------------------------------------------------------------
+1. INFORMACIÓN DEL VEHÍCULO
+--------------------------------------------------------------------------------
+Placa                   : XCS-762
+Marca                   : Volkswagen
+Modelo                  : Jetta
+Año de Fabricación      : 2013
+Color                   : Rojo
+Kilometraje             : 29900 km
+Transmisión             : Automática
+Combustible             : Gasolina
+Precio Valuado          : $ 19.000.000 COP
+N° Propietarios Previos : 2
+Fecha de Registro       : 15/10/2026
+
+--------------------------------------------------------------------------------
+2. INFORMACIÓN DEL PROPIETARIO
+--------------------------------------------------------------------------------
+Nombre Completo         : Anderson
+Cédula / Documento      : 1043299840
+Teléfono de Contacto    : 3226502683
+Correo Electrónico      : andervalencia848@gmail.com
+
+--------------------------------------------------------------------------------
+3. RESULTADOS DE REVISIÓN TÉCNICO-MECÁNICA
+--------------------------------------------------------------------------------
+Puntaje Revisión Técnica        : 88 / 100
+Puntaje Revisión Mecánica       : 83 / 100
+Puntaje Promedio General        : 85 / 100
+Concepto Calificación           : Buen estado general (Aprobado)
+
+Observaciones de Revisión Técnica (Documental y Estética):
+Sin observaciones técnicas registradas.
+
+Observaciones de Revisión Mecánica (Motor, Frenos, Suspensión):
+Sin observaciones mecánicas registradas.
+
+================================================================================
+Documento emitido electrónicamente por RAIC — Sistema de Gestión Vehicular.
+================================================================================

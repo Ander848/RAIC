@@ -2,9 +2,11 @@ package com.checkautos.cars;
 
 import com.checkautos.models.Car;
 import com.checkautos.models.Propietario;
+import com.checkautos.reports.InformeService;
 import com.checkautos.repository.CarRepository;
 import com.checkautos.repository.PropietarioRepository;
 import com.checkautos.utils.AppUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -16,11 +18,20 @@ public class CarManager {
 
     private final CarRepository        carRepository;
     private final PropietarioRepository propietarioRepository;
+    private final InformeService        informeService;
     private Car currentCar;
 
     public CarManager(CarRepository carRepository, PropietarioRepository propietarioRepository) {
+        this(carRepository, propietarioRepository, null);
+    }
+
+    @Autowired
+    public CarManager(CarRepository carRepository,
+                      PropietarioRepository propietarioRepository,
+                      @Autowired(required = false) InformeService informeService) {
         this.carRepository         = carRepository;
         this.propietarioRepository = propietarioRepository;
+        this.informeService        = informeService;
         this.currentCar            = new Car();
     }
 
@@ -84,11 +95,11 @@ public class CarManager {
         }
         car.setFechaModificacion(ahora);
 
+        Propietario p = null;
         if (car.getCedula() != null && !car.getCedula().isBlank()) {
             String cedula = car.getCedula().trim();
             Optional<Propietario> existente = propietarioRepository.findByCedula(cedula);
 
-            Propietario p;
             if (existente.isPresent()) {
                 p = existente.get();
                 if (car.getPropietario() != null && !car.getPropietario().isBlank()) {
@@ -106,7 +117,18 @@ public class CarManager {
             car.setPropietarioId(p.getId());
         }
 
-        return carRepository.save(car);
+        Car guardado = carRepository.save(car);
+
+        // Generar automáticamente los archivos de informe (PDF y TXT)
+        if (informeService != null) {
+            try {
+                informeService.generarArchivosInforme(guardado, p);
+            } catch (Exception e) {
+                // Loggeado internamente en InformeService, no bloquear retorno
+            }
+        }
+
+        return guardado;
     }
 
     public boolean saveAndRegisterCar() {

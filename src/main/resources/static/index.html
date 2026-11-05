@@ -189,6 +189,9 @@
 
     <div class="sb-section">
       <div class="sb-label">Reportes</div>
+      <a class="sb-link" data-view="informes" onclick="showView('informes')">
+        <i class="bi bi-file-earmark-text-fill"></i><span class="sb-link-text">Consultar Informes</span>
+      </a>
       <a class="sb-link" data-view="analitica" onclick="showView('analitica')">
         <i class="bi bi-bar-chart-line-fill"></i><span class="sb-link-text">Analítica PowerBI</span>
       </a>
@@ -276,10 +279,6 @@
               <div class="stat-label">Actividad reciente</div>
               <div style="font-size:0.82rem;color:var(--text-secondary);margin-top:0.25rem;">Eventos e historial de vehículos en el sistema</div>
             </div>
-            <div class="actividad-live-badge">
-              <span class="live-dot-ping"></span>
-              <span>En vivo</span>
-            </div>
           </div>
           <div id="listaActividadReciente" class="actividad-lista-container">
             <!-- Cargado dinámicamente desde app.js con datos reales -->
@@ -287,31 +286,54 @@
         </div>
 
         <div class="stat-card large comenzar-proceso" id="cardComenzarProceso">
-          <div class="stat-label">Comenzar proceso</div>
-          <div style="margin-top:1.5rem;">
-            <p style="color:var(--text-secondary);line-height:1.5;margin-bottom:1.5rem;font-size:0.9rem;">
-              Sigue el proceso en orden desde el panel lateral. Cada paso se desbloquea al completar el anterior.
+          <div class="stat-header" style="margin-bottom:0.75rem;">
+            <div>
+              <div class="stat-label">Comenzar proceso</div>
+              <div style="font-size:0.82rem;color:var(--text-secondary);margin-top:0.25rem;">Flujo guiado para inspección, diagnóstico y valuación</div>
+            </div>
+          </div>
+
+          <div class="comenzar-proceso-content">
+            <p class="comenzar-proceso-intro">
+              Sigue la secuencia de etapas para ingresar un nuevo vehículo al inventario. Cada módulo valida la información técnica para emitir el certificado oficial.
             </p>
-            <div style="display:flex;flex-direction:column;gap:0.75rem;">
-              <div style="display:flex;align-items:center;gap:0.75rem;">
-                <div style="width:36px;height:36px;border-radius:8px;background:var(--gradient-main);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.9rem;">1</div>
-                <span style="font-weight:500;font-size:0.9rem;">Registrar datos del auto</span>
+
+            <div class="proceso-pasos-lista">
+              <div class="proceso-paso-item">
+                <div class="proceso-paso-num activo">1</div>
+                <div class="proceso-paso-info">
+                  <div class="proceso-paso-titulo">Registrar datos del auto</div>
+                  <div class="proceso-paso-desc">Ingreso de placa particular, especificaciones y datos del dueño.</div>
+                </div>
               </div>
-              <div style="display:flex;align-items:center;gap:0.75rem;">
-                <div style="width:36px;height:36px;border-radius:8px;background:var(--bg-input);color:var(--text-muted);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.9rem;">2</div>
-                <span style="color:var(--text-secondary);font-size:0.9rem;">Revisión técnica (documentos)</span>
+
+              <div class="proceso-paso-item">
+                <div class="proceso-paso-num">2</div>
+                <div class="proceso-paso-info">
+                  <div class="proceso-paso-titulo">Revisión técnica y documental</div>
+                  <div class="proceso-paso-desc">Validación de documentos, SOAT, RUNT e inspección estética exterior.</div>
+                </div>
               </div>
-              <div style="display:flex;align-items:center;gap:0.75rem;">
-                <div style="width:36px;height:36px;border-radius:8px;background:var(--bg-input);color:var(--text-muted);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.9rem;">3</div>
-                <span style="color:var(--text-secondary);font-size:0.9rem;">Revisión mecánica</span>
+
+              <div class="proceso-paso-item">
+                <div class="proceso-paso-num">3</div>
+                <div class="proceso-paso-info">
+                  <div class="proceso-paso-titulo">Revisión mecánica integral</div>
+                  <div class="proceso-paso-desc">Evaluación del motor, sistema de frenos, suspensión y transmisión.</div>
+                </div>
               </div>
-              <div style="display:flex;align-items:center;gap:0.75rem;">
-                <div style="width:36px;height:36px;border-radius:8px;background:var(--bg-input);color:var(--text-muted);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.9rem;">4</div>
-                <span style="color:var(--text-secondary);font-size:0.9rem;">Calcular valuación y precio</span>
+
+              <div class="proceso-paso-item">
+                <div class="proceso-paso-num">4</div>
+                <div class="proceso-paso-info">
+                  <div class="proceso-paso-titulo">Calcular valuación y certificado</div>
+                  <div class="proceso-paso-desc">Estimación comercial inteligente y generación automática del informe.</div>
+                </div>
               </div>
             </div>
-            <button class="btn-primary-dark" style="width:100%;justify-content:center;margin-top:1.5rem;" onclick="showView('registro')">
-              <i class="bi bi-plus-lg"></i> Registrar nuevo auto
+
+            <button class="btn-primary-dark" style="width:100%;justify-content:center;margin-top:1rem;padding:0.85rem 1rem;" onclick="showView('registro')">
+              <i class="bi bi-plus-lg"></i> Iniciar registro de nuevo auto
             </button>
           </div>
         </div>
@@ -749,6 +771,126 @@
         <div class="cd-body">
           <p style="color:var(--text-secondary);font-size:1rem;line-height:1.6;margin-bottom:1.5rem;">Visualización interactiva con gráficos de autos por ciudad, marca, transmisión, año y mapa de Colombia.</p>
           <a href="https://app.powerbi.com/view?r=eyJrIjoiMGYxNTlmYjEtOGJkNC00OGI5LWE1OTAtNzYyNGU4NmVjNmE5IiwidCI6IjlkMTJiZjNmLWU0ZjYtNDdhYi05MTJmLTFhMmYwZmM0OGFhNCIsImMiOjR9" target="_blank" class="btn-primary-dark"><i class="bi bi-box-arrow-up-right"></i> Abrir Dashboard completo en PowerBI</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════
+         INFORMES Y FICHAS VEHICULARES
+    ════════════════════════════════════════════════════════════ -->
+    <section id="view-informes" class="view">
+      <div style="margin-bottom:2rem;">
+        <h2 style="font-family:'Outfit',sans-serif;font-size:1.8rem;font-weight:800;">Consultar y Descargar Informes</h2>
+        <p style="color:var(--text-secondary);font-size:0.95rem;margin-top:0.3rem;">
+          Consulta la información completa del vehículo, datos del propietario y resultados de revisión técnica-mecánica ingresando la placa.
+        </p>
+      </div>
+
+      <!-- Buscador por placa -->
+      <div class="card-dark" style="margin-bottom:1.75rem;">
+        <div class="cd-body" style="padding:1.5rem;">
+          <div style="display:flex;gap:1rem;flex-wrap:wrap;align-items:center;">
+            <div style="position:relative;flex:1;min-width:240px;">
+              <i class="bi bi-search" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text-muted);font-size:1.1rem;"></i>
+              <input type="text" id="inpPlacaBuscarInforme" class="form-control" placeholder="Ingresa la placa (ej: ABC-123)"
+                     style="padding-left:2.75rem;font-family:'Outfit',monospace;font-size:1.1rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;"
+                     maxlength="7" onkeyup="if(event.key==='Enter') buscarInformePorPlaca()">
+            </div>
+            <button class="btn-primary-dark" onclick="buscarInformePorPlaca()" id="btnBuscarInforme">
+              <i class="bi bi-search"></i> Buscar informe
+            </button>
+            <button class="btn-ghost" onclick="limpiarConsultaInforme()">
+              <i class="bi bi-arrow-counterclockwise"></i> Limpiar
+            </button>
+          </div>
+          <div id="informeMsgBusqueda" style="margin-top:0.85rem;font-size:0.88rem;display:none;"></div>
+        </div>
+      </div>
+
+      <!-- Contenedor del Resultado del Informe -->
+      <div id="contenedorDetalleInforme" style="display:none;margin-bottom:2rem;">
+        <div class="card-dark" style="margin-bottom:1.5rem;border-color:rgba(0,212,255,0.3);">
+          <div class="cd-header" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;">
+            <div style="display:flex;align-items:center;gap:1rem;">
+              <span class="car-plate-badge" id="infBadgePlaca" style="font-size:1.1rem;padding:0.4rem 0.9rem;">—</span>
+              <div>
+                <h3 id="infTituloVehiculo" style="font-family:'Outfit',sans-serif;font-size:1.35rem;font-weight:800;margin:0;">—</h3>
+                <span id="infSubtituloVehiculo" style="color:var(--text-secondary);font-size:0.85rem;">—</span>
+              </div>
+            </div>
+            <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
+              <button class="btn-primary-dark" style="background:#e11d48;border-color:#e11d48;" onclick="descargarInformeActual('pdf')">
+                <i class="bi bi-file-earmark-pdf-fill"></i> Descargar PDF
+              </button>
+              <button class="btn-primary-dark" style="background:#334155;border-color:#475569;" onclick="descargarInformeActual('txt')">
+                <i class="bi bi-file-earmark-text-fill"></i> Descargar TXT
+              </button>
+            </div>
+          </div>
+
+          <div class="cd-body">
+            <!-- Grid de Información: 3 Bento Cards -->
+            <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));gap:1.25rem;">
+
+              <!-- 1. Datos del Vehículo -->
+              <div class="informe-info-box">
+                <div class="informe-box-title"><i class="bi bi-car-front-fill"></i> Información del Vehículo</div>
+                <div class="informe-info-grid">
+                  <div class="informe-item"><span class="inf-label">Marca:</span><span class="inf-value" id="infMarca">—</span></div>
+                  <div class="informe-item"><span class="inf-label">Modelo:</span><span class="inf-value" id="infModelo">—</span></div>
+                  <div class="informe-item"><span class="inf-label">Año:</span><span class="inf-value" id="infAño">—</span></div>
+                  <div class="informe-item"><span class="inf-label">Color:</span><span class="inf-value" id="infColor">—</span></div>
+                  <div class="informe-item"><span class="inf-label">Kilometraje:</span><span class="inf-value" id="infKilometraje">—</span></div>
+                  <div class="informe-item"><span class="inf-label">Transmisión:</span><span class="inf-value" id="infTransmision">—</span></div>
+                  <div class="informe-item"><span class="inf-label">Combustible:</span><span class="inf-value" id="infCombustible">—</span></div>
+                  <div class="informe-item"><span class="inf-label">Precio Valuado:</span><span class="inf-value" id="infPrecio" style="color:var(--accent);font-weight:700;">—</span></div>
+                  <div class="informe-item"><span class="inf-label">Estado:</span><span class="inf-value" id="infEstado">—</span></div>
+                  <div class="informe-item"><span class="inf-label">N° Propietarios:</span><span class="inf-value" id="infNPropietarios">—</span></div>
+                </div>
+              </div>
+
+              <!-- 2. Datos del Propietario -->
+              <div class="informe-info-box">
+                <div class="informe-box-title"><i class="bi bi-person-badge-fill"></i> Información del Propietario</div>
+                <div class="informe-info-grid">
+                  <div class="informe-item"><span class="inf-label">Nombre:</span><span class="inf-value" id="infPropNombre" style="font-weight:700;">—</span></div>
+                  <div class="informe-item"><span class="inf-label">Cédula:</span><span class="inf-value" id="infPropCedula">—</span></div>
+                  <div class="informe-item"><span class="inf-label">Teléfono:</span><span class="inf-value" id="infPropTelefono">—</span></div>
+                  <div class="informe-item"><span class="inf-label">Correo:</span><span class="inf-value" id="infPropEmail">—</span></div>
+                  <div class="informe-item"><span class="inf-label">Fecha Registro:</span><span class="inf-value" id="infFechaRegistro">—</span></div>
+                </div>
+              </div>
+
+              <!-- 3. Puntajes de Revisión -->
+              <div class="informe-info-box">
+                <div class="informe-box-title"><i class="bi bi-clipboard-check-fill"></i> Calificación Técnico-Mecánica</div>
+                <div style="display:flex;gap:0.75rem;margin-bottom:1rem;flex-wrap:wrap;">
+                  <div class="informe-score-card" style="background:rgba(0,212,255,0.1);border-color:rgba(0,212,255,0.3);">
+                    <div style="font-size:0.75rem;color:var(--text-secondary);text-transform:uppercase;">Técnico</div>
+                    <div style="font-size:1.4rem;font-weight:800;color:var(--accent);" id="infPuntajeTecnico">0</div>
+                    <div style="font-size:0.7rem;color:var(--text-muted);">de 100</div>
+                  </div>
+                  <div class="informe-score-card" style="background:rgba(16,185,129,0.1);border-color:rgba(16,185,129,0.3);">
+                    <div style="font-size:0.75rem;color:var(--text-secondary);text-transform:uppercase;">Mecánico</div>
+                    <div style="font-size:1.4rem;font-weight:800;color:var(--success);" id="infPuntajeMecanico">0</div>
+                    <div style="font-size:0.7rem;color:var(--text-muted);">de 100</div>
+                  </div>
+                  <div class="informe-score-card" style="background:rgba(245,158,11,0.1);border-color:rgba(245,158,11,0.3);">
+                    <div style="font-size:0.75rem;color:var(--text-secondary);text-transform:uppercase;">Promedio</div>
+                    <div style="font-size:1.4rem;font-weight:800;color:var(--warning);" id="infPuntajePromedio">0</div>
+                    <div style="font-size:0.7rem;color:var(--text-muted);">de 100</div>
+                  </div>
+                </div>
+                <div style="margin-top:0.75rem;">
+                  <div style="font-size:0.8rem;font-weight:600;color:var(--text-secondary);margin-bottom:0.25rem;">Observaciones Técnicas:</div>
+                  <p id="infObsRevision" style="font-size:0.85rem;color:var(--text-primary);background:var(--bg-input);padding:0.6rem;border-radius:8px;line-height:1.4;margin-bottom:0.6rem;">—</p>
+                  <div style="font-size:0.8rem;font-weight:600;color:var(--text-secondary);margin-bottom:0.25rem;">Observaciones Mecánicas:</div>
+                  <p id="infObsMecanica" style="font-size:0.85rem;color:var(--text-primary);background:var(--bg-input);padding:0.6rem;border-radius:8px;line-height:1.4;margin:0;">—</p>
+                </div>
+              </div>
+
+            </div>
+          </div>
         </div>
       </div>
     </section>

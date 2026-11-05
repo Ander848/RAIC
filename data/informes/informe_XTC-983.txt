@@ -1,0 +1,48 @@
+================================================================================
+          RAIC — CERTIFICADO OFICIAL DE INSPECCIÓN Y VALUACIÓN VEHICULAR         
+================================================================================
+Placa Vehicular:      XTC-983
+Fecha de Expedición:  30/10/2026 23:18:32
+Estado en Sistema:    Disponible
+ID de Registro:       6acdc2564867cb729b8b3297
+
+--------------------------------------------------------------------------------
+1. INFORMACIÓN DEL VEHÍCULO
+--------------------------------------------------------------------------------
+Placa                   : XTC-983
+Marca                   : Alfa Romeo
+Modelo                  : Giulia
+Año de Fabricación      : 1990
+Color                   : Rojo
+Kilometraje             : 3 km
+Transmisión             : Automática
+Combustible             : Gasolina
+Precio Valuado          : $ 19.000.000 COP
+N° Propietarios Previos : 1 — Primer dueño
+Fecha de Registro       : 13/10/2026
+
+--------------------------------------------------------------------------------
+2. INFORMACIÓN DEL PROPIETARIO
+--------------------------------------------------------------------------------
+Nombre Completo         : Anderson
+Cédula / Documento      : 1043299840
+Teléfono de Contacto    : 3226502683
+Correo Electrónico      : andervalencia848@gmail.com
+
+--------------------------------------------------------------------------------
+3. RESULTADOS DE REVISIÓN TÉCNICO-MECÁNICA
+--------------------------------------------------------------------------------
+Puntaje Revisión Técnica        : 88 / 100
+Puntaje Revisión Mecánica       : 96 / 100
+Puntaje Promedio General        : 92 / 100
+Concepto Calificación           : Excelente estado técnico y mecánico (Aprobado)
+
+Observaciones de Revisión Técnica (Documental y Estética):
+Sin observaciones técnicas registradas.
+
+Observaciones de Revisión Mecánica (Motor, Frenos, Suspensión):
+Sin observaciones mecánicas registradas.
+
+================================================================================
+Documento emitido electrónicamente por RAIC — Sistema de Gestión Vehicular.
+================================================================================

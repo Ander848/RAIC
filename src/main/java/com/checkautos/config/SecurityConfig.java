@@ -79,6 +79,8 @@ public class SecurityConfig {
                 // Predicción — predecir, estado y pesos para ADMIN y USUARIO
                 .requestMatchers(HttpMethod.POST, "/api/prediccion/predecir").hasAnyRole("ADMIN", "USUARIO")
                 .requestMatchers(HttpMethod.GET,  "/api/prediccion/**").hasAnyRole("ADMIN", "USUARIO")
+                // Consulta y descarga de informes vehiculares (PDF y TXT)
+                .requestMatchers("/api/informes/**").hasAnyRole("ADMIN", "USUARIO")
                 // Info del usuario autenticado
                 .requestMatchers("/api/auth/me").hasAnyRole("ADMIN", "USUARIO")
 

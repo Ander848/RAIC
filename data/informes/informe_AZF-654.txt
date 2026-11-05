@@ -1,0 +1,48 @@
+================================================================================
+          RAIC — CERTIFICADO OFICIAL DE INSPECCIÓN Y VALUACIÓN VEHICULAR         
+================================================================================
+Placa Vehicular:      AZF-654
+Fecha de Expedición:  30/10/2026 23:18:31
+Estado en Sistema:    Disponible
+ID de Registro:       6aceef6abcf4b3734f48632a
+
+--------------------------------------------------------------------------------
+1. INFORMACIÓN DEL VEHÍCULO
+--------------------------------------------------------------------------------
+Placa                   : AZF-654
+Marca                   : Cadillac
+Modelo                  : XT5
+Año de Fabricación      : 2021
+Color                   : Blanco
+Kilometraje             : 2233 km
+Transmisión             : Manual
+Combustible             : Híbrido
+Precio Valuado          : $ 36.250.000 COP
+N° Propietarios Previos : 1 — Primer dueño
+Fecha de Registro       : 13/10/2026
+
+--------------------------------------------------------------------------------
+2. INFORMACIÓN DEL PROPIETARIO
+--------------------------------------------------------------------------------
+Nombre Completo         : Anderson
+Cédula / Documento      : 1043299840
+Teléfono de Contacto    : 3226502683
+Correo Electrónico      : andervalencia848@gmail.com
+
+--------------------------------------------------------------------------------
+3. RESULTADOS DE REVISIÓN TÉCNICO-MECÁNICA
+--------------------------------------------------------------------------------
+Puntaje Revisión Técnica        : 50 / 100
+Puntaje Revisión Mecánica       : 58 / 100
+Puntaje Promedio General        : 54 / 100
+Concepto Calificación           : Requiere intervención o reparaciones inmediatas (No aprobado)
+
+Observaciones de Revisión Técnica (Documental y Estética):
+Sin observaciones técnicas registradas.
+
+Observaciones de Revisión Mecánica (Motor, Frenos, Suspensión):
+Sin observaciones mecánicas registradas.
+
+================================================================================
+Documento emitido electrónicamente por RAIC — Sistema de Gestión Vehicular.
+================================================================================
