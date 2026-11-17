@@ -30,10 +30,15 @@ public class InformeDetalleDTO {
     private String observacionRevision;
     private String observacionMecanica;
 
-    // Archivos
+    // Archivos y Certificación
     private boolean archivoPdfExiste;
     private boolean archivoTxtExiste;
     private LocalDateTime fechaGeneracion;
+    private String folio;
+    private String dictamen;
+    private String dictamenTipo;
+    private String concepto;
+    private String fechaExpedicion;
 
     public InformeDetalleDTO() {}
 
@@ -108,4 +113,19 @@ public class InformeDetalleDTO {
 
     public LocalDateTime getFechaGeneracion() { return fechaGeneracion; }
     public void setFechaGeneracion(LocalDateTime fechaGeneracion) { this.fechaGeneracion = fechaGeneracion; }
+
+    public String getFolio() { return folio; }
+    public void setFolio(String folio) { this.folio = folio; }
+
+    public String getDictamen() { return dictamen; }
+    public void setDictamen(String dictamen) { this.dictamen = dictamen; }
+
+    public String getDictamenTipo() { return dictamenTipo; }
+    public void setDictamenTipo(String dictamenTipo) { this.dictamenTipo = dictamenTipo; }
+
+    public String getConcepto() { return concepto; }
+    public void setConcepto(String concepto) { this.concepto = concepto; }
+
+    public String getFechaExpedicion() { return fechaExpedicion; }
+    public void setFechaExpedicion(String fechaExpedicion) { this.fechaExpedicion = fechaExpedicion; }
 }

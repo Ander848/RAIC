@@ -1,33 +1,36 @@
 ================================================================================
-          RAIC — CERTIFICADO OFICIAL DE INSPECCIÓN Y VALUACIÓN VEHICULAR         
+            RAIC — SISTEMA INTELIGENTE DE GESTIÓN VEHICULAR                     
+         CERTIFICADO OFICIAL DE INSPECCIÓN, PERITAJE Y VALUACIÓN                
 ================================================================================
+Folio Oficial:        CERT-RAIC-2026-XCS-762
 Placa Vehicular:      XCS-762
-Fecha de Expedición:  30/10/2026 23:18:29
-Estado en Sistema:    En revisión
-ID de Registro:       6ad1267e34fdd24a73b3e1b9
+Fecha de Expedición:  17/11/2026 03:01:17
+Estado en Sistema:    Disponible
+ID de Registro:       N/A
+Dictamen Técnico:     APROBADO (Excelente estado técnico y mecánico (Aprobado))
 
 --------------------------------------------------------------------------------
 1. INFORMACIÓN DEL VEHÍCULO
 --------------------------------------------------------------------------------
-Placa                   : XCS-762
-Marca                   : Volkswagen
-Modelo                  : Jetta
-Año de Fabricación      : 2013
-Color                   : Rojo
-Kilometraje             : 29900 km
-Transmisión             : Automática
-Combustible             : Gasolina
-Precio Valuado          : $ 19.000.000 COP
-N° Propietarios Previos : 2
-Fecha de Registro       : 15/10/2026
+Placa                     : XCS-762
+Marca                     : Volkswagen
+Modelo                    : Jetta
+Año de Fabricación        : 2013
+Color                     : Rojo
+Kilometraje               : 29900 km
+Transmisión               : Automática
+Combustible               : Gasolina
+Precio Valuado            : $ 19.000.000 COP
+N° Propietarios Previos   : 1
+Fecha de Registro         : 17/11/2026 03:01:17
 
 --------------------------------------------------------------------------------
 2. INFORMACIÓN DEL PROPIETARIO
 --------------------------------------------------------------------------------
-Nombre Completo         : Anderson
-Cédula / Documento      : 1043299840
-Teléfono de Contacto    : 3226502683
-Correo Electrónico      : andervalencia848@gmail.com
+Nombre Completo           : Anderson
+Cédula / Documento        : 1043299840
+Teléfono de Contacto      : 3226502683
+Correo Electrónico        : andervalencia848@gmail.com
 
 --------------------------------------------------------------------------------
 3. RESULTADOS DE REVISIÓN TÉCNICO-MECÁNICA
@@ -35,7 +38,7 @@ Correo Electrónico      : andervalencia848@gmail.com
 Puntaje Revisión Técnica        : 88 / 100
 Puntaje Revisión Mecánica       : 83 / 100
 Puntaje Promedio General        : 85 / 100
-Concepto Calificación           : Buen estado general (Aprobado)
+Dictamen y Concepto             : APROBADO - Excelente estado técnico y mecánico (Aprobado)
 
 Observaciones de Revisión Técnica (Documental y Estética):
 Sin observaciones técnicas registradas.
@@ -43,6 +46,12 @@ Sin observaciones técnicas registradas.
 Observaciones de Revisión Mecánica (Motor, Frenos, Suspensión):
 Sin observaciones mecánicas registradas.
 
+--------------------------------------------------------------------------------
+4. VALIDACIÓN DE AUTENTICIDAD Y FIRMA DIGITAL
+--------------------------------------------------------------------------------
+Hash SHA-256 de Validación: 55C23624DD50EC29
+Firma Electrónica Autorizada: RAIC-SECURE-AUTOMATED-STAMP
 ================================================================================
 Documento emitido electrónicamente por RAIC — Sistema de Gestión Vehicular.
+Válido como soporte técnico de inspección y valuación vehicular.
 ================================================================================

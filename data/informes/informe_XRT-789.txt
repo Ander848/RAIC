@@ -1,33 +1,36 @@
 ================================================================================
-          RAIC — CERTIFICADO OFICIAL DE INSPECCIÓN Y VALUACIÓN VEHICULAR         
+            RAIC — SISTEMA INTELIGENTE DE GESTIÓN VEHICULAR                     
+         CERTIFICADO OFICIAL DE INSPECCIÓN, PERITAJE Y VALUACIÓN                
 ================================================================================
+Folio Oficial:        CERT-RAIC-2026-XRT-789
 Placa Vehicular:      XRT-789
-Fecha de Expedición:  30/10/2026 23:31:41
-Estado en Sistema:    Disponible
+Fecha de Expedición:  17/11/2026 03:10:43
+Estado en Sistema:    Vendido
 ID de Registro:       6ae56f2dccd79520d4f237cb
+Dictamen Técnico:     APROBADO (Buen estado técnico-mecánico general (Aprobado))
 
 --------------------------------------------------------------------------------
 1. INFORMACIÓN DEL VEHÍCULO
 --------------------------------------------------------------------------------
-Placa                   : XRT-789
-Marca                   : Ferrari
-Modelo                  : Roma
-Año de Fabricación      : 2005
-Color                   : Rojo
-Kilometraje             : 50000 km
-Transmisión             : Automática
-Combustible             : Gasolina
-Precio Valuado          : $ 16.000.000 COP
-N° Propietarios Previos : 2
-Fecha de Registro       : 30/10/2026
+Placa                     : XRT-789
+Marca                     : Ferrari
+Modelo                    : Roma
+Año de Fabricación        : 2005
+Color                     : Rojo
+Kilometraje               : 50000 km
+Transmisión               : Automática
+Combustible               : Gasolina
+Precio Valuado            : $ 16.000.000 COP
+N° Propietarios Previos   : 2
+Fecha de Registro         : 30/10/2026
 
 --------------------------------------------------------------------------------
 2. INFORMACIÓN DEL PROPIETARIO
 --------------------------------------------------------------------------------
-Nombre Completo         : Anderson
-Cédula / Documento      : 1043299840
-Teléfono de Contacto    : 3226502683
-Correo Electrónico      : andervalencia848@gmail.com
+Nombre Completo           : Anderson
+Cédula / Documento        : 1043299840
+Teléfono de Contacto      : 3226502683
+Correo Electrónico        : andervalencia848@gmail.com
 
 --------------------------------------------------------------------------------
 3. RESULTADOS DE REVISIÓN TÉCNICO-MECÁNICA
@@ -35,7 +38,7 @@ Correo Electrónico      : andervalencia848@gmail.com
 Puntaje Revisión Técnica        : 69 / 100
 Puntaje Revisión Mecánica       : 75 / 100
 Puntaje Promedio General        : 72 / 100
-Concepto Calificación           : Aceptable con observaciones (Condicional)
+Dictamen y Concepto             : APROBADO - Buen estado técnico-mecánico general (Aprobado)
 
 Observaciones de Revisión Técnica (Documental y Estética):
 El espejo derecho esta roto y tiene un poco de oxido en la carroceria
@@ -43,6 +46,12 @@ El espejo derecho esta roto y tiene un poco de oxido en la carroceria
 Observaciones de Revisión Mecánica (Motor, Frenos, Suspensión):
 Llantas desgastadas, necesitan cambip
 
+--------------------------------------------------------------------------------
+4. VALIDACIÓN DE AUTENTICIDAD Y FIRMA DIGITAL
+--------------------------------------------------------------------------------
+Hash SHA-256 de Validación: 49AE41257A48CDD4
+Firma Electrónica Autorizada: RAIC-SECURE-AUTOMATED-STAMP
 ================================================================================
 Documento emitido electrónicamente por RAIC — Sistema de Gestión Vehicular.
+Válido como soporte técnico de inspección y valuación vehicular.
 ================================================================================

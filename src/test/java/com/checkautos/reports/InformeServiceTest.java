@@ -108,6 +108,10 @@ class InformeServiceTest {
         assertEquals("Ana Gomez", dto.getPropietarioNombre());
         assertEquals("3009876543", dto.getPropietarioTelefono());
         assertEquals("ana@test.com", dto.getPropietarioEmail());
+        assertNotNull(dto.getFolio());
+        assertTrue(dto.getFolio().contains("XYZ-789"));
+        assertNotNull(dto.getDictamen());
+        assertNotNull(dto.getConcepto());
         assertTrue(dto.isArchivoPdfExiste());
         assertTrue(dto.isArchivoTxtExiste());
     }

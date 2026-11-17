@@ -33,8 +33,8 @@ public class SecurityConfig {
                 // ── Públicas (sin token) ──────────────────────────────
                 .requestMatchers("/api/auth/login", "/api/auth/registro", "/api/auth/google").permitAll()
                 .requestMatchers("/api/config/public").permitAll()
-                .requestMatchers("/", "/index.html", "/css/**", "/js/**",
-                                 "/favicon.ico", "/*.html", "/*.js", "/*.css").permitAll()
+                .requestMatchers("/", "/index.html", "/css/**", "/js/**", "/img/**", "/images/**", "/assets/**",
+                                 "/favicon.ico", "/*.html", "/*.js", "/*.css", "/*.png", "/*.jpg", "/*.jpeg", "/*.svg", "/*.ico", "/*.webp").permitAll()
 
                 // ── Solo ADMIN ────────────────────────────────────────
                 // Registrar auto (stateless REST)

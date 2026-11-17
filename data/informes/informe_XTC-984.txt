@@ -1,0 +1,57 @@
+================================================================================
+            RAIC — SISTEMA INTELIGENTE DE GESTIÓN VEHICULAR                     
+         CERTIFICADO OFICIAL DE INSPECCIÓN, PERITAJE Y VALUACIÓN                
+================================================================================
+Folio Oficial:        CERT-RAIC-2026-XTC-984
+Placa Vehicular:      XTC-984
+Fecha de Expedición:  17/11/2026 03:10:59
+Estado en Sistema:    Disponible
+ID de Registro:       6afc00c9e8e98505e3e19dac
+Dictamen Técnico:     APROBADO (Buen estado técnico-mecánico general (Aprobado))
+
+--------------------------------------------------------------------------------
+1. INFORMACIÓN DEL VEHÍCULO
+--------------------------------------------------------------------------------
+Placa                     : XTC-984
+Marca                     : Geely
+Modelo                    : Okavango
+Año de Fabricación        : 2015
+Color                     : Rojo
+Kilometraje               : 50000 km
+Transmisión               : Automática
+Combustible               : Híbrido
+Precio Valuado            : $ 23.600.000 COP
+N° Propietarios Previos   : 2
+Fecha de Registro         : 17/11/2026
+
+--------------------------------------------------------------------------------
+2. INFORMACIÓN DEL PROPIETARIO
+--------------------------------------------------------------------------------
+Nombre Completo           : Anderson
+Cédula / Documento        : 1043299840
+Teléfono de Contacto      : 3226502683
+Correo Electrónico        : andervalencia848@gmail.com
+
+--------------------------------------------------------------------------------
+3. RESULTADOS DE REVISIÓN TÉCNICO-MECÁNICA
+--------------------------------------------------------------------------------
+Puntaje Revisión Técnica        : 88 / 100
+Puntaje Revisión Mecánica       : 58 / 100
+Puntaje Promedio General        : 73 / 100
+Dictamen y Concepto             : APROBADO - Buen estado técnico-mecánico general (Aprobado)
+
+Observaciones de Revisión Técnica (Documental y Estética):
+Sin observaciones técnicas registradas.
+
+Observaciones de Revisión Mecánica (Motor, Frenos, Suspensión):
+Sin observaciones mecánicas registradas.
+
+--------------------------------------------------------------------------------
+4. VALIDACIÓN DE AUTENTICIDAD Y FIRMA DIGITAL
+--------------------------------------------------------------------------------
+Hash SHA-256 de Validación: 2DDF9335A001F9FD
+Firma Electrónica Autorizada: RAIC-SECURE-AUTOMATED-STAMP
+================================================================================
+Documento emitido electrónicamente por RAIC — Sistema de Gestión Vehicular.
+Válido como soporte técnico de inspección y valuación vehicular.
+================================================================================

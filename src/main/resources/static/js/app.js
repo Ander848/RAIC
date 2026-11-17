@@ -71,7 +71,10 @@ function setBotonCargando(btn, cargando, textoOriginal, textoCargando) {
   }
 }
 
-function abrirLogin() {
+function abrirLogin(tab = 'login') {
+  if (typeof switchTab === 'function') {
+    switchTab(tab === 'register' ? 'register' : 'login');
+  }
   const modal = document.getElementById('loginModal');
   if (modal) {
     modal.style.removeProperty('display');
@@ -94,7 +97,7 @@ function abrirLogin() {
     authMsg.style.display = 'none';
     authMsg.textContent = '';
   }
-  const userInp = document.getElementById('loginUser');
+  const userInp = document.getElementById(tab === 'register' ? 'regNombre' : 'loginUser');
   if (userInp) setTimeout(() => userInp.focus(), 60);
 }
 
@@ -1778,6 +1781,35 @@ function renderizarDetalleInforme(inf) {
   setTexto('infObsRevision', inf.observacionRevision || 'Sin observaciones técnicas.');
   setTexto('infObsMecanica', inf.observacionMecanica || 'Sin observaciones mecánicas.');
 
+  // Dictamen Técnico y Folio
+  const prom = Number(inf.puntajePromedio) || 0;
+  const dictamenBadge = document.getElementById('infDictamenBadge');
+  const dictamenConcepto = document.getElementById('infDictamenConcepto');
+  const dictamenBanner = document.getElementById('infDictamenBanner');
+
+  const dictamenValido = inf.dictamen ? inf.dictamen.toUpperCase() : null;
+  let dictamenText = dictamenValido || (prom >= 70 ? 'APROBADO' : (prom >= 50 ? 'CONDICIONAL' : 'NO APROBADO'));
+  let dictamenClass = dictamenText === 'APROBADO' ? 'dictamen-aprobado' : (dictamenText === 'CONDICIONAL' ? 'dictamen-condicional' : 'dictamen-rechazado');
+  let conceptoText = inf.concepto || (prom >= 85 ? 'Excelente estado técnico y mecánico certificado' : (prom >= 70 ? 'Buen estado técnico-mecánico general (Aprobado)' : (prom >= 50 ? 'Aprobado con observaciones técnico-mecánicas' : 'Requiere intervención o reparaciones inmediatas')));
+
+  if (dictamenBadge) {
+    dictamenBadge.textContent = dictamenText;
+    dictamenBadge.className = 'inf-dictamen-badge ' + dictamenClass;
+  }
+  if (dictamenConcepto) {
+    dictamenConcepto.textContent = conceptoText;
+  }
+  if (dictamenBanner) {
+    dictamenBanner.className = 'informe-dictamen-banner banner-' + dictamenClass;
+  }
+
+  const cleanPlaca = (inf.placa || '').replace(/[^A-Z0-9]/gi, '');
+  const folioText = inf.folio || (`CERT-RAIC-${new Date().getFullYear()}-${cleanPlaca}`);
+  const fechaText = inf.fechaExpedicion || (inf.fechaRegistro || new Date().toLocaleDateString('es-CO'));
+
+  setTexto('infFolioBadge', `Folio: ${folioText}`);
+  setTexto('infFechaExpedicion', `Emisión: ${fechaText}`);
+
   cont.style.display = 'block';
   cont.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
@@ -1950,7 +1982,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   const btnAbrirLanding = document.getElementById('btnAbrirLogin') || document.querySelector('.btn-landing');
   if (btnAbrirLanding) {
-    btnAbrirLanding.onclick = abrirLogin;
+    btnAbrirLanding.onclick = () => abrirLogin('login');
   }
 
   inicializarGoogleAuth();

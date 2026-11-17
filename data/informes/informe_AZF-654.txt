@@ -1,33 +1,36 @@
 ================================================================================
-          RAIC — CERTIFICADO OFICIAL DE INSPECCIÓN Y VALUACIÓN VEHICULAR         
+            RAIC — SISTEMA INTELIGENTE DE GESTIÓN VEHICULAR                     
+         CERTIFICADO OFICIAL DE INSPECCIÓN, PERITAJE Y VALUACIÓN                
 ================================================================================
+Folio Oficial:        CERT-RAIC-2026-AZF-654
 Placa Vehicular:      AZF-654
-Fecha de Expedición:  30/10/2026 23:18:31
+Fecha de Expedición:  17/11/2026 03:01:17
 Estado en Sistema:    Disponible
-ID de Registro:       6aceef6abcf4b3734f48632a
+ID de Registro:       N/A
+Dictamen Técnico:     CONDICIONAL (Aceptable con observaciones (Condicional))
 
 --------------------------------------------------------------------------------
 1. INFORMACIÓN DEL VEHÍCULO
 --------------------------------------------------------------------------------
-Placa                   : AZF-654
-Marca                   : Cadillac
-Modelo                  : XT5
-Año de Fabricación      : 2021
-Color                   : Blanco
-Kilometraje             : 2233 km
-Transmisión             : Manual
-Combustible             : Híbrido
-Precio Valuado          : $ 36.250.000 COP
-N° Propietarios Previos : 1 — Primer dueño
-Fecha de Registro       : 13/10/2026
+Placa                     : AZF-654
+Marca                     : Cadillac
+Modelo                    : XT5
+Año de Fabricación        : 2021
+Color                     : Blanco
+Kilometraje               : 2233 km
+Transmisión               : Manual
+Combustible               : Híbrido
+Precio Valuado            : $ 36.250.000 COP
+N° Propietarios Previos   : 1
+Fecha de Registro         : 17/11/2026 03:01:17
 
 --------------------------------------------------------------------------------
 2. INFORMACIÓN DEL PROPIETARIO
 --------------------------------------------------------------------------------
-Nombre Completo         : Anderson
-Cédula / Documento      : 1043299840
-Teléfono de Contacto    : 3226502683
-Correo Electrónico      : andervalencia848@gmail.com
+Nombre Completo           : Anderson
+Cédula / Documento        : 1043299840
+Teléfono de Contacto      : 3226502683
+Correo Electrónico        : andervalencia848@gmail.com
 
 --------------------------------------------------------------------------------
 3. RESULTADOS DE REVISIÓN TÉCNICO-MECÁNICA
@@ -35,7 +38,7 @@ Correo Electrónico      : andervalencia848@gmail.com
 Puntaje Revisión Técnica        : 50 / 100
 Puntaje Revisión Mecánica       : 58 / 100
 Puntaje Promedio General        : 54 / 100
-Concepto Calificación           : Requiere intervención o reparaciones inmediatas (No aprobado)
+Dictamen y Concepto             : CONDICIONAL - Aceptable con observaciones (Condicional)
 
 Observaciones de Revisión Técnica (Documental y Estética):
 Sin observaciones técnicas registradas.
@@ -43,6 +46,12 @@ Sin observaciones técnicas registradas.
 Observaciones de Revisión Mecánica (Motor, Frenos, Suspensión):
 Sin observaciones mecánicas registradas.
 
+--------------------------------------------------------------------------------
+4. VALIDACIÓN DE AUTENTICIDAD Y FIRMA DIGITAL
+--------------------------------------------------------------------------------
+Hash SHA-256 de Validación: B6334A827D26C4B9
+Firma Electrónica Autorizada: RAIC-SECURE-AUTOMATED-STAMP
 ================================================================================
 Documento emitido electrónicamente por RAIC — Sistema de Gestión Vehicular.
+Válido como soporte técnico de inspección y valuación vehicular.
 ================================================================================
